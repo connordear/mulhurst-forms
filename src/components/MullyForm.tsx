@@ -49,10 +49,14 @@ const camperFormSchema = z.object({
   address: addressSchema,
 });
 
-type FormTabKey = "camperInfo" | "parentInfo" | "emergencyContacts";
+const CAMPER_INFO = "camperInfo";
+const PARENT_INFO = "parentInfo";
+const MEDICAL_INFO = "medicalInfo";
+const EMERGENCY_CONTACTS = "emergencyContacts";
+const PAYMENT_INFO = "paymentInfo";
 
 const MullyForm = () => {
-  const [activeTab, setActiveTab] = useState<FormTabKey>("camperInfo");
+  const [activeTab, setActiveTab] = useState(CAMPER_INFO);
   const camperForm = useForm<z.infer<typeof camperFormSchema>>({
     resolver: zodResolver(camperFormSchema),
     defaultValues: {
@@ -74,10 +78,14 @@ const MullyForm = () => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
-    setActiveTab("parentInfo");
+    setActiveTab(PARENT_INFO);
   }
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} default={"camperInfo"}>
+    <Tabs
+      value={activeTab}
+      onValueChange={setActiveTab}
+      defaultValue={CAMPER_INFO}
+    >
       <TabsList>
         <TabsTrigger value="camperInfo">Camper Info</TabsTrigger>
         <TabsTrigger value="medicalInfo">Medical Info</TabsTrigger>
