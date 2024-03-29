@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Raleway as FontSans } from "next/font/google";
 import "./globals.css";
+import Providers from "./providers";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -25,7 +26,7 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

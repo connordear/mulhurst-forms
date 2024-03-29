@@ -1,4 +1,4 @@
-import { createBrowserClient } from "@supabase/ssr";
+import { useMutation } from "@tanstack/react-query";
 import { clsx, type ClassValue } from "clsx";
 import { useAtomValue } from "jotai";
 import { twMerge } from "tailwind-merge";
@@ -10,12 +10,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function useSubmitForm() {
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+async function submit(formValues: any) {
+  return await fetch("/api/form", {
+    method: "POST",
+    body: JSON.stringify(formValues),
+  });
+}
 
+export function useSubmitForm(sessionId: string | null) {
   const camperData = useAtomValue(camperInfoAtom);
   const medicalData = useAtomValue(medicalInfoAtom);
   const contactData = useAtomValue(contactInfoAtom);
@@ -26,23 +28,19 @@ export function useSubmitForm() {
     ...contactData,
   };
 
-  async function submit() {
-    const { error } = await supabase.from("registrations").insert([
-      {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        birthdate: values.birthdate,
-        addressLine1: values.address.line1,
-        addressLine2: values.address.line2,
-        city: values.address.city,
-        stateProv: values.address.stateProv,
-        postalZip: values.address.postalZip,
-        country: values.address.country,
-      },
-    ]);
-    console.log("res", error);
-    return error;
-  }
-  return submit;
+  const submitFormMutation = useMutation({
+    mutationFn: async () => {
+      if (!sessionId) {
+        throw new Error("Session ID is required");
+      }
+      return await submit({ ...values, sessionId }).then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error("Failed to submit form");
+      });
+    },
+  });
+
+  return submitFormMutation;
 }

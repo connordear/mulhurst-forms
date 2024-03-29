@@ -17,6 +17,8 @@ export const addressSchema = z.object({
 });
 
 export const camperFormSchema = z.object({
+  program: z.number().min(1, { message: "Program is required" }),
+  daysOfWeek: z.optional(z.array(z.string())),
   email: z.string().email(),
   firstName: z.string().min(1, { message: "First Name is required" }).max(50),
   lastName: z.string().min(1, { message: "Last Name is required" }).max(50),
@@ -29,10 +31,12 @@ export const camperFormSchema = z.object({
 export type CamperInfo = z.infer<typeof camperFormSchema>;
 
 export const defaultCamperInfo: CamperInfo = {
+  program: 0,
+  daysOfWeek: undefined,
   email: "",
   firstName: "",
   lastName: "",
-  birthdate: "2000-01-01T00:00:00.000Z",
+  birthdate: "2000-01-01",
   address: {
     line1: "",
     line2: "",

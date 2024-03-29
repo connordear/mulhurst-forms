@@ -151,7 +151,7 @@ const EmergencyContactForm = ({
                 </Card>
               );
             })}
-            <Button type="submit">Next</Button>;
+            <Button type="submit">Next</Button>
           </form>
         </Form>
       </CardContent>

@@ -1,5 +1,6 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getPrograms } from "@/lib/api";
 import {
   camperFormSchema,
   CamperInfo,
@@ -18,14 +19,17 @@ import {
   MedicalInfo,
   medicalInfoAtom,
 } from "@/lib/medical";
-import { useSubmitForm } from "@/lib/utils";
+import { useSelectedProgram } from "@/lib/programState";
+import { getDaysOfWeek } from "@/utils/dateUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 
-import { useEffect, useState } from "react";
-import { FormState, useForm } from "react-hook-form";
+import { useEffect, useMemo, useState } from "react";
+import { FormState, useForm, useFormState } from "react-hook-form";
 import CamperForm from "./CamperForm";
 import EmergencyContactForm from "./EmergencyContactForm";
+import LoadingCard from "./LoadingCard";
 import MedicalForm from "./MedicalForm";
 import PaymentForm from "./PaymentForm";
 import { Button } from "./ui/button";
@@ -40,7 +44,7 @@ function getTabStyle(formState: FormState<any>) {
   if (formState.isDirty && formState.isValid && formState.isSubmitted) {
     return "text-green-500";
   }
-  if (formState.isDirty && formState.isSubmitted && !formState.isValid) {
+  if (formState.isDirty && !formState.isValid) {
     return "text-red-500";
   }
 
@@ -48,13 +52,37 @@ function getTabStyle(formState: FormState<any>) {
 }
 
 const MullyForm = () => {
-  const submit = useSubmitForm();
+  const { data: programs, isLoading } = useQuery({
+    queryKey: ["programs"],
+    queryFn: getPrograms,
+  });
+
   const [camperData, setCamperData] = useAtom(camperInfoAtom);
   const camperForm = useForm<CamperInfo>({
     values: camperData,
     resolver: zodResolver(camperFormSchema),
     reValidateMode: "onBlur",
   });
+
+  const selectedDaysOfWeek = camperForm.watch("daysOfWeek");
+  const selectedProgram = useSelectedProgram(programs, camperForm);
+
+  const purchaseInfo = useMemo(() => {
+    let priceId = selectedProgram?.weekPriceId;
+    let quantity = 1;
+    if (selectedProgram && selectedProgram.dayPriceId && selectedDaysOfWeek) {
+      const possibleDaysOfWeek = getDaysOfWeek(
+        selectedProgram?.startDate,
+        selectedProgram?.endDate
+      );
+      console.log("possibleDaysOfWeek", possibleDaysOfWeek, selectedDaysOfWeek);
+      if (possibleDaysOfWeek.length !== selectedDaysOfWeek.length) {
+        priceId = selectedProgram?.dayPriceId;
+        quantity = selectedDaysOfWeek.length;
+      }
+    }
+    return { priceId, quantity };
+  }, [selectedProgram, selectedDaysOfWeek]);
 
   const [medicalData, setMedicalData] = useAtom(medicalInfoAtom);
   const medicalForm = useForm<MedicalInfo>({
@@ -81,14 +109,23 @@ const MullyForm = () => {
 
   const [activeTab, setActiveTab] = useState(CAMPER_INFO);
 
-  const camperFormSubmitted = camperForm.formState.isSubmitted;
-  const medicalFormSubmitted = medicalForm.formState.isSubmitted;
-  const emergencyContactInfoSubmitted = contactForm.formState.isSubmitted;
+  const { isSubmitSuccessful: camperFormSubmitted } = useFormState(camperForm);
+  const { isSubmitSuccessful: medicalFormSubmitted } =
+    useFormState(medicalForm);
+  const { isSubmitSuccessful: emergencyContactInfoSubmitted } =
+    useFormState(contactForm);
 
-  const allSubmitted =
-    camperFormSubmitted &&
-    medicalFormSubmitted &&
-    emergencyContactInfoSubmitted;
+  const invalidForms = useMemo(() => {
+    let forms = [];
+    !camperFormSubmitted && forms.push("Camper Info");
+    !medicalFormSubmitted && forms.push("Medical Info");
+    !emergencyContactInfoSubmitted && forms.push("Emergency Contacts");
+    return forms;
+  }, [
+    camperFormSubmitted,
+    medicalFormSubmitted,
+    emergencyContactInfoSubmitted,
+  ]);
 
   useEffect(() => {
     if (activeTab === PAYMENT_INFO) {
@@ -101,7 +138,15 @@ const MullyForm = () => {
   return (
     <Tabs
       value={activeTab}
-      onValueChange={setActiveTab}
+      onValueChange={(newTab) => {
+        setActiveTab((prev) => {
+          if (prev === CAMPER_INFO) camperForm.handleSubmit(setCamperData)();
+          if (prev === MEDICAL_INFO) medicalForm.handleSubmit(setMedicalData)();
+          if (prev === EMERGENCY_CONTACTS)
+            contactForm.handleSubmit(setContactInfo)();
+          return newTab;
+        });
+      }}
       defaultValue={CAMPER_INFO}
     >
       <TabsList className="w-full">
@@ -114,32 +159,32 @@ const MullyForm = () => {
           </TabsTrigger>
           <TabsTrigger
             value="medicalInfo"
-            className={getTabStyle(camperForm.formState)}
+            className={getTabStyle(medicalForm.formState)}
           >
             Medical Info
           </TabsTrigger>
           <TabsTrigger
             value="emergencyContacts"
-            className={getTabStyle(camperForm.formState)}
+            className={getTabStyle(contactForm.formState)}
           >
             Emergency Contacts
           </TabsTrigger>
-          <TabsTrigger
-            value="paymentInfo"
-            className={getTabStyle(camperForm.formState)}
-          >
-            Payment Info
-          </TabsTrigger>
+          <TabsTrigger value="paymentInfo">Payment Info</TabsTrigger>
         </ScrollArea>
       </TabsList>
       <TabsContent value="camperInfo">
-        <CamperForm
-          form={camperForm}
-          onSubmit={(values) => {
-            setCamperData(values);
-            setActiveTab(MEDICAL_INFO);
-          }}
-        />
+        {programs ? (
+          <CamperForm
+            programs={programs}
+            form={camperForm}
+            onSubmit={(values) => {
+              setCamperData(values);
+              setActiveTab(MEDICAL_INFO);
+            }}
+          />
+        ) : (
+          <LoadingCard />
+        )}
       </TabsContent>
       <TabsContent value="medicalInfo">
         <MedicalForm
@@ -160,21 +205,15 @@ const MullyForm = () => {
         />
       </TabsContent>
       <TabsContent value="paymentInfo">
-        <PaymentForm areAllFormsComplete={allSubmitted} onSubmit={submit} />
+        {selectedProgram && purchaseInfo && (
+          <PaymentForm
+            priceId={purchaseInfo.priceId}
+            quantity={purchaseInfo.quantity}
+            invalidForms={invalidForms}
+          />
+        )}
       </TabsContent>
-      <Button
-        disabled={!allSubmitted}
-        type="button"
-        onClick={submit}
-        variant="secondary"
-        style={{
-          position: "fixed",
-          bottom: "5rem",
-          right: "2rem",
-        }}
-      >
-        Submit Form
-      </Button>
+
       <Button
         onClick={clearForms}
         variant="secondary"

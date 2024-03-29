@@ -6,27 +6,21 @@
   background: hsla(148, 71%, 16%, 1);
 
   background: linear-gradient(
-    90deg,
     hsla(148, 71%, 16%, 1) 0%,
-    hsla(148, 70%, 24%, 1) 0%,
-    hsla(148, 70%, 43%, 1) 52%,
-    hsla(0, 0%, 99%, 1) 100%
+    hsla(148, 70%, 24%, 1) 50%,
+    hsla(148, 70%, 43%, 1) 100%
   );
 
   background: -moz-linear-gradient(
-    90deg,
     hsla(148, 71%, 16%, 1) 0%,
-    hsla(148, 70%, 24%, 1) 0%,
-    hsla(148, 70%, 43%, 1) 52%,
-    hsla(0, 0%, 99%, 1) 100%
+    hsla(148, 70%, 24%, 1) 50%,
+    hsla(148, 70%, 43%, 1) 100%
   );
 
   background: -webkit-linear-gradient(
-    90deg,
     hsla(148, 71%, 16%, 1) 0%,
-    hsla(148, 70%, 24%, 1) 0%,
-    hsla(148, 70%, 43%, 1) 52%,
-    hsla(0, 0%, 99%, 1) 100%
+    hsla(148, 70%, 24%, 1) 50%,
+    hsla(148, 70%, 43%, 1) 100%
   );
 }
 
