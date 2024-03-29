@@ -46,7 +46,7 @@ const CamperForm = ({
     if (!selectedProgramId && programs.length) {
       camperForm.setValue("program", programs[0].id);
     }
-  }, [programs, selectedProgramId]);
+  }, [programs, selectedProgramId, camperForm]);
 
   const availableDaysOfWeek = useMemo(() => {
     if (

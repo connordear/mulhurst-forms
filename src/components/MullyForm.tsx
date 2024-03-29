@@ -133,7 +133,7 @@ const MullyForm = () => {
       medicalForm.trigger();
       contactForm.trigger();
     }
-  }, [activeTab]);
+  }, [activeTab, camperForm, medicalForm, contactForm]);
 
   return (
     <Tabs

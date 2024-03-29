@@ -1,18 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getPaymentStatus } from "@/lib/api";
-import { contactInfoAtom } from "@/lib/emergencyContacts";
 import { useSubmitForm } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const SubmitCard = () => {
-  const formValues = useAtomValue(contactInfoAtom);
   const searchParams = useSearchParams();
   const session_id = searchParams.get("session_id");
   const submit = useSubmitForm(session_id);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["paymentStatus", session_id],
@@ -21,17 +19,18 @@ const SubmitCard = () => {
   });
 
   useEffect(() => {
-    if (data && data.status === "complete") {
+    if (data && data.status === "complete" && !hasSubmitted) {
+      setHasSubmitted(true);
       submit.mutateAsync();
     }
-  }, [data]);
+  }, [data, submit, hasSubmitted]);
 
   const text = useMemo(() => {
     if (submit.isPending || isLoading) return "Submitting...";
     if (submit.isError) return "Error submitting form.";
     if (submit.isSuccess) return "Form submitted successfully!";
     return "Unknown error";
-  }, [submit, formValues, isLoading]);
+  }, [submit, isLoading]);
 
   const navToHome = () => {
     window.location.href = "/";
