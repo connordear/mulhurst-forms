@@ -1,4 +1,5 @@
 "use client";
+import { LoadingPage } from "@/components/LoadingCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getPaymentStatus } from "@/lib/api";
@@ -7,7 +8,7 @@ import { useSubmitForm } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { Suspense, useEffect, useMemo } from "react";
 
 const SubmitPage = () => {
   const formValues = useAtomValue(contactInfoAtom);
@@ -39,23 +40,25 @@ const SubmitPage = () => {
   };
 
   return (
-    <main className="md:flex min-h-screen flex-col items-center md:p-24 p-10 bg-gradient">
-      <Card className="mb-10">
-        <CardHeader>
-          <h1 className="text-4xl font-bold color-white text-center">
-            Mulhurst Camp Registration Submission
-          </h1>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col align-center">
-            <h2 className="mt-10 text-center">{text}</h2>
-            <Button className="mt-10" onClick={navToHome}>
-              Register Another Camper
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </main>
+    <Suspense fallback={<LoadingPage />}>
+      <main className="md:flex min-h-screen flex-col items-center md:p-24 p-10 bg-gradient">
+        <Card className="mb-10">
+          <CardHeader>
+            <h1 className="text-4xl font-bold color-white text-center">
+              Mulhurst Camp Registration Submission
+            </h1>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col align-center">
+              <h2 className="mt-10 text-center">{text}</h2>
+              <Button className="mt-10" onClick={navToHome}>
+                Register Another Camper
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </main>
+    </Suspense>
   );
 };
 

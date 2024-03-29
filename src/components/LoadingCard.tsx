@@ -30,4 +30,12 @@ const LoadingCard = () => {
   );
 };
 
+export const LoadingPage = () => {
+  return (
+    <main className="md:flex min-h-screen flex-col items-center md:p-24 p-10 bg-gradient">
+      <LoadingSpinner />
+    </main>
+  );
+};
+
 export default LoadingCard;
