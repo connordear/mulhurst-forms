@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "./ui/card";
+import { Card, CardContent } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 
 const LoadingSpinner = () => {
@@ -22,7 +22,6 @@ const LoadingSpinner = () => {
 const LoadingCard = () => {
   return (
     <Card>
-      <CardHeader>Submit your payment here.</CardHeader>
       <CardContent>
         <LoadingSpinner />
       </CardContent>
