@@ -1,4 +1,3 @@
-"use client";
 import { LoadingPage } from "@/components/LoadingCard";
 import { Metadata } from "next";
 import { Suspense } from "react";

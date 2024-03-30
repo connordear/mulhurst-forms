@@ -145,7 +145,18 @@ const MullyForm = () => {
       !isEmergencyContactInfoSubmitted &&
         contactForm.handleSubmit(setContactInfo)();
     }
-  }, [activeTab, camperForm, medicalForm, contactForm]);
+  }, [
+    activeTab,
+    camperForm,
+    medicalForm,
+    contactForm,
+    setCamperData,
+    setMedicalData,
+    setContactInfo,
+    isCamperFormSubmitted,
+    isMedicalFormSubmitted,
+    isEmergencyContactInfoSubmitted,
+  ]);
 
   return (
     <Tabs
