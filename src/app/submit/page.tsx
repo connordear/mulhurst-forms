@@ -1,15 +1,16 @@
 "use client";
 import { LoadingPage } from "@/components/LoadingCard";
-import Head from "next/head";
+import { Metadata } from "next";
 import { Suspense } from "react";
 import SubmitCard from "./SubmitCard";
+
+export const metadata: Metadata = {
+  title: "Mulhurst Camp Registration Form",
+};
 
 const SubmitPage = () => {
   return (
     <Suspense fallback={<LoadingPage />}>
-      <Head>
-        <title>Mulhurst Camp Registration Form</title>
-      </Head>
       <SubmitCard />
     </Suspense>
   );

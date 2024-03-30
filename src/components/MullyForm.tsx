@@ -109,22 +109,29 @@ const MullyForm = () => {
 
   const [activeTab, setActiveTab] = useState(CAMPER_INFO);
 
-  const { isSubmitSuccessful: camperFormSubmitted } = useFormState(camperForm);
-  const { isSubmitSuccessful: medicalFormSubmitted } =
-    useFormState(medicalForm);
-  const { isSubmitSuccessful: emergencyContactInfoSubmitted } =
-    useFormState(contactForm);
+  const {
+    isSubmitSuccessful: isCamperFormSubmitSuccessful,
+    isSubmitted: isCamperFormSubmitted,
+  } = useFormState(camperForm);
+  const {
+    isSubmitSuccessful: isMedicalFormSubmitSuccessful,
+    isSubmitted: isMedicalFormSubmitted,
+  } = useFormState(medicalForm);
+  const {
+    isSubmitSuccessful: isEmergencyContactInfoSubmitSuccessful,
+    isSubmitted: isEmergencyContactInfoSubmitted,
+  } = useFormState(contactForm);
 
   const invalidForms = useMemo(() => {
     let forms = [];
-    !camperFormSubmitted && forms.push("Camper Info");
-    !medicalFormSubmitted && forms.push("Medical Info");
-    !emergencyContactInfoSubmitted && forms.push("Emergency Contacts");
+    !isCamperFormSubmitSuccessful && forms.push("Camper Info");
+    !isMedicalFormSubmitSuccessful && forms.push("Medical Info");
+    !isEmergencyContactInfoSubmitSuccessful && forms.push("Emergency Contacts");
     return forms;
   }, [
-    camperFormSubmitted,
-    medicalFormSubmitted,
-    emergencyContactInfoSubmitted,
+    isCamperFormSubmitSuccessful,
+    isMedicalFormSubmitSuccessful,
+    isEmergencyContactInfoSubmitSuccessful,
   ]);
 
   useEffect(() => {
@@ -132,6 +139,11 @@ const MullyForm = () => {
       camperForm.trigger();
       medicalForm.trigger();
       contactForm.trigger();
+
+      !isCamperFormSubmitted && camperForm.handleSubmit(setCamperData)();
+      !isMedicalFormSubmitted && medicalForm.handleSubmit(setMedicalData)();
+      !isEmergencyContactInfoSubmitted &&
+        contactForm.handleSubmit(setContactInfo)();
     }
   }, [activeTab, camperForm, medicalForm, contactForm]);
 
