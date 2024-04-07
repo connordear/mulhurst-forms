@@ -1,6 +1,47 @@
 import { atomWithStorage } from "jotai/utils";
 import { z } from "zod";
 
+export enum SwimmingLevel {
+  NONE = "None",
+  BEGINNER = "Beginner",
+  INTERMEDIATE = "Intermediate",
+  ADVANCED = "Advanced",
+}
+
+export const swimmingLevelOptions = [
+  { value: SwimmingLevel.NONE, label: "None" },
+  { value: SwimmingLevel.BEGINNER, label: "Beginner" },
+  { value: SwimmingLevel.INTERMEDIATE, label: "Intermediate" },
+  { value: SwimmingLevel.ADVANCED, label: "Advanced" },
+];
+
+export enum TShirtSize {
+  XS = "XS",
+  S = "S",
+  M = "M",
+  L = "L",
+  XL = "XL",
+  XXL = "XXL",
+}
+
+export const tShirtSizeOptions = [
+  { value: TShirtSize.XS, label: "XS" },
+  { value: TShirtSize.S, label: "S" },
+  { value: TShirtSize.M, label: "M" },
+  { value: TShirtSize.L, label: "L" },
+  { value: TShirtSize.XL, label: "XL" },
+  { value: TShirtSize.XXL, label: "XXL" },
+];
+
+export const heardAboutUsOptions = [
+  { value: "friend", label: "Friend" },
+  { value: "family", label: "Family" },
+  { value: "school", label: "School" },
+  { value: "church", label: "Church" },
+  { value: "socialMedia", label: "Social Media" },
+  { value: "other", label: "Other" },
+];
+
 export const addressSchema = z.object({
   line1: z.string().min(1, { message: "Address is required" }).max(100),
   line2: z.string().min(0).max(100),
@@ -53,12 +94,12 @@ export const defaultCamperInfo: CamperInfo = {
     country: "CA",
   },
   arePhotosAllowed: true,
-  swimmingLevel: "",
+  swimmingLevel: SwimmingLevel.BEGINNER,
   hasBeenToCampBefore: true,
   howDidYouHearAboutUs: "",
   friendCabinRequest: "",
   sex: "",
-  tShirtSize: "",
+  tShirtSize: TShirtSize.M,
 };
 
 export const camperInfoAtom = atomWithStorage<CamperInfo>(

@@ -14,7 +14,10 @@ export const contactSchema = z.object({
   email: z.string().email(),
   firstName: z.string().min(1).max(50),
   lastName: z.string().min(1).max(50),
-  phone: z.string().min(10).max(15),
+  phone: z
+    .string()
+    .min(10, "Phone number must be at least 10 digits long")
+    .max(15, "Phone number must be less than 15 digits long"),
   relationship: z.enum(relationshipOptions).optional(),
 });
 

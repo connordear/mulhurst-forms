@@ -2,21 +2,21 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getPrograms } from "@/lib/api";
 import {
-  camperFormSchema,
   CamperInfo,
+  camperFormSchema,
   camperInfoAtom,
   defaultCamperInfo,
 } from "@/lib/camper";
 import {
+  EmergencyContact,
   contactInfoAtom,
   defaultEmergencyContactInfo,
-  EmergencyContact,
   emergencyContactsSchema,
 } from "@/lib/emergencyContacts";
 import {
+  MedicalInfo,
   defaultMedicalInfo,
   medicalFormSchema,
-  MedicalInfo,
   medicalInfoAtom,
 } from "@/lib/medical";
 import { useSelectedProgram } from "@/lib/programState";
@@ -61,7 +61,7 @@ const MullyForm = () => {
   const camperForm = useForm<CamperInfo>({
     values: camperData,
     resolver: zodResolver(camperFormSchema),
-    reValidateMode: "onBlur",
+    reValidateMode: "onChange",
   });
 
   const selectedDaysOfWeek = camperForm.watch("daysOfWeek");
@@ -88,14 +88,14 @@ const MullyForm = () => {
   const medicalForm = useForm<MedicalInfo>({
     values: medicalData,
     resolver: zodResolver(medicalFormSchema),
-    reValidateMode: "onBlur",
+    reValidateMode: "onChange",
   });
 
   const [contactInfo, setContactInfo] = useAtom(contactInfoAtom);
   const contactForm = useForm<EmergencyContact>({
     values: contactInfo,
     resolver: zodResolver(emergencyContactsSchema),
-    reValidateMode: "onBlur",
+    reValidateMode: "onChange",
   });
 
   function clearForms() {

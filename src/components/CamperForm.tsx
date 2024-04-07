@@ -11,7 +11,12 @@ import {
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import { CamperInfo } from "@/lib/camper";
+import {
+  CamperInfo,
+  heardAboutUsOptions,
+  swimmingLevelOptions,
+  tShirtSizeOptions,
+} from "@/lib/camper";
 import { useSelectedProgram } from "@/lib/programState";
 import { Program } from "@/lib/types";
 import { getDaysOfWeek } from "@/utils/dateUtils";
@@ -365,9 +370,11 @@ const CamperForm = ({
                       className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       style={{ maxWidth: "100%" }}
                     >
-                      <option value="beginner">Beginner</option>
-                      <option value="intermediate">Intermediate</option>
-                      <option value="advanced">Advanced</option>
+                      {swimmingLevelOptions.map((o) => (
+                        <option key={o.value} value={o.value}>
+                          {o.label}
+                        </option>
+                      ))}
                     </select>
                   </FormControl>
                   <FormMessage />
@@ -426,11 +433,11 @@ const CamperForm = ({
                       className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       style={{ maxWidth: "100%" }}
                     >
-                      <option value="xs">XS</option>
-                      <option value="s">S</option>
-                      <option value="m">M</option>
-                      <option value="l">L</option>
-                      <option value="xl">XL</option>
+                      {tShirtSizeOptions.map((o) => (
+                        <option key={o.value} value={o.value}>
+                          {o.label}
+                        </option>
+                      ))}
                     </select>
                   </FormControl>
                   <FormMessage />
@@ -454,13 +461,11 @@ const CamperForm = ({
                       className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       style={{ maxWidth: "100%" }}
                     >
-                      <option value="word-of-mouth">Word of mouth</option>
-                      <option value="church">Church</option>
-                      <option value="social-media">Social Media</option>
-                      <option value="am-longtime-camper">
-                        I am a longtime camper
-                      </option>
-                      <option value="other">Other</option>
+                      {heardAboutUsOptions.map((o) => (
+                        <option key={o.value} value={o.value}>
+                          {o.label}
+                        </option>
+                      ))}
                     </select>
                   </FormControl>
 
