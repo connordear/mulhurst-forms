@@ -48,9 +48,13 @@ const SubmitCard = () => {
         <CardContent>
           <div className="flex flex-col align-center">
             <h2 className="mt-10 text-center">{text}</h2>
-            <Button className="mt-10" onClick={navToHome}>
-              Register Another Camper
-            </Button>
+            {!submit.isPending && (
+              <Button className="mt-10" onClick={navToHome}>
+                {submit.isSuccess
+                  ? "Register Another Camper"
+                  : "Return Home to try again"}
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
