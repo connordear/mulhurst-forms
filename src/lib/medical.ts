@@ -13,6 +13,7 @@ export const medicalFormSchema = z.object({
     .min(0)
     .max(500, "Must be less than 500 characters"),
   other: z.string().min(0).max(500, "Must be less than 500 characters"),
+  areOverTheCounterMedicationsAllowed: z.boolean(),
 });
 
 export type MedicalInfo = z.infer<typeof medicalFormSchema>;
@@ -23,6 +24,7 @@ export const defaultMedicalInfo: MedicalInfo = {
   medicalConditions: "",
   dietaryRestrictions: "",
   other: "",
+  areOverTheCounterMedicationsAllowed: true,
 };
 
 export const medicalInfoAtom = atomWithStorage<MedicalInfo>(

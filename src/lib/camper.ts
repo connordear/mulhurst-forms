@@ -26,6 +26,13 @@ export const camperFormSchema = z.object({
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}/, { message: "Invalid date" }),
   address: addressSchema,
+  arePhotosAllowed: z.boolean(),
+  swimmingLevel: z.string().min(1, { message: "Swimming Level is required" }),
+  hasBeenToCampBefore: z.boolean(),
+  howDidYouHearAboutUs: z.string().min(1, { message: "Required" }),
+  friendCabinRequest: z.string().min(0).max(50),
+  gender: z.string().min(1, { message: "Required" }),
+  tShirtSize: z.string().min(1, { message: "T-Shirt Size is required" }),
 });
 
 export type CamperInfo = z.infer<typeof camperFormSchema>;
@@ -45,6 +52,13 @@ export const defaultCamperInfo: CamperInfo = {
     postalZip: "",
     country: "CA",
   },
+  arePhotosAllowed: true,
+  swimmingLevel: "",
+  hasBeenToCampBefore: false,
+  howDidYouHearAboutUs: "",
+  friendCabinRequest: "",
+  gender: "",
+  tShirtSize: "",
 };
 
 export const camperInfoAtom = atomWithStorage<CamperInfo>(
