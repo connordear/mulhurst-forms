@@ -3,6 +3,7 @@
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,10 +15,12 @@ import { CamperInfo } from "@/lib/camper";
 import { useSelectedProgram } from "@/lib/programState";
 import { Program } from "@/lib/types";
 import { getDaysOfWeek } from "@/utils/dateUtils";
+import { Label } from "@radix-ui/react-label";
 import { useEffect, useMemo } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader } from "./ui/card";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group";
 
 interface CamperFormProps {
@@ -150,6 +153,7 @@ const CamperForm = ({
                 )}
               />
             )}
+
             <FormField
               control={camperForm.control}
               name="email"
@@ -163,32 +167,34 @@ const CamperForm = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={camperForm.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={camperForm.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex flex-col md:flex-row justify-between gap-5">
+              <FormField
+                control={camperForm.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={camperForm.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={camperForm.control}
@@ -230,13 +236,176 @@ const CamperForm = ({
                 </FormItem>
               )}
             />
+            <div className="flex flex-col md:flex-row justify-between gap-5">
+              <FormField
+                control={camperForm.control}
+                name="address.city"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>City</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={camperForm.control}
+                name="address.stateProv"
+                render={({ field }) => (
+                  <FormItem className="flex-2">
+                    <FormLabel>Province</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col md:flex-row justify-between gap-5">
+              <FormField
+                control={camperForm.control}
+                name="address.country"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel> Country</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={camperForm.control}
+                name="address.postalZip"
+                render={({ field }) => (
+                  <FormItem className="flex-2">
+                    <FormLabel>Postal Code</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="flex flex-col md:flex-row justify-between gap-5">
+              <FormField
+                control={camperForm.control}
+                name="hasBeenToCampBefore"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Has the camper been to camp before?</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={(v: "yes" | "no") => {
+                          return field.onChange(v === "yes");
+                        }}
+                        value={field.value ? "yes" : "no"}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="yes" id="camp-before-yes" />
+                          <Label htmlFor="camp-before-yes">Yes</Label>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="no" id="camp-before-no" />
+                          <Label htmlFor="camp-before-no">No</Label>
+                        </div>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={camperForm.control}
+                name="arePhotosAllowed"
+                render={({ field }) => (
+                  <FormItem className="flex-2">
+                    <FormLabel>Are photos allowed?</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={(v: "yes" | "no") => {
+                          return field.onChange(v === "yes");
+                        }}
+                        value={field.value ? "yes" : "no"}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="yes" id="yes" />
+                          <Label htmlFor="yes">Yes</Label>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="no" id="no" />
+                          <Label htmlFor="no">No</Label>
+                        </div>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={camperForm.control}
-              name="address.city"
+              name="swimmingLevel"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>City</FormLabel>
+                  <FormLabel>Swimming Level</FormLabel>
+                  <FormControl>
+                    <select
+                      {...field}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      style={{ maxWidth: "100%" }}
+                    >
+                      <option value="beginner">Beginner</option>
+                      <option value="intermediate">Intermediate</option>
+                      <option value="advanced">Advanced</option>
+                    </select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={camperForm.control}
+              name="sex"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Sex</FormLabel>
+                  <FormControl>
+                    <select
+                      {...field}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      style={{ maxWidth: "100%" }}
+                    >
+                      <option value="female">Female</option>
+                      <option value="male">Male</option>
+                    </select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={camperForm.control}
+              name="friendCabinRequest"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Friend/Cabin mate Requests</FormLabel>
+                  <FormDescription>
+                    Please list any friends or siblings the camper would like to
+                    share a cabin with.
+                  </FormDescription>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -247,12 +416,22 @@ const CamperForm = ({
 
             <FormField
               control={camperForm.control}
-              name="address.stateProv"
+              name="tShirtSize"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Province</FormLabel>
+                  <FormLabel>T-Shirt Size</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <select
+                      {...field}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      style={{ maxWidth: "100%" }}
+                    >
+                      <option value="xs">XS</option>
+                      <option value="s">S</option>
+                      <option value="m">M</option>
+                      <option value="l">L</option>
+                      <option value="xl">XL</option>
+                    </select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -261,27 +440,30 @@ const CamperForm = ({
 
             <FormField
               control={camperForm.control}
-              name="address.postalZip"
+              name="howDidYouHearAboutUs"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Postal Code</FormLabel>
+                <FormItem style={{ maxWidth: "470px" }}>
+                  <FormLabel>How did you hear about us?</FormLabel>
+                  <FormDescription>
+                    This information will help us get a better understanding of
+                    how we can encourage growth within our camp community.
+                  </FormDescription>
                   <FormControl>
-                    <Input {...field} />
+                    <select
+                      {...field}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      style={{ maxWidth: "100%" }}
+                    >
+                      <option value="word-of-mouth">Word of mouth</option>
+                      <option value="church">Church</option>
+                      <option value="social-media">Social Media</option>
+                      <option value="am-longtime-camper">
+                        I am a longtime camper
+                      </option>
+                      <option value="other">Other</option>
+                    </select>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
-            <FormField
-              control={camperForm.control}
-              name="address.country"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Postal Country</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

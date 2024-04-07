@@ -30,8 +30,8 @@ export const camperFormSchema = z.object({
   swimmingLevel: z.string().min(1, { message: "Swimming Level is required" }),
   hasBeenToCampBefore: z.boolean(),
   howDidYouHearAboutUs: z.string().min(1, { message: "Required" }),
-  friendCabinRequest: z.string().min(0).max(50),
-  gender: z.string().min(1, { message: "Required" }),
+  friendCabinRequest: z.string().max(100),
+  sex: z.string().min(1, { message: "Required" }),
   tShirtSize: z.string().min(1, { message: "T-Shirt Size is required" }),
 });
 
@@ -54,10 +54,10 @@ export const defaultCamperInfo: CamperInfo = {
   },
   arePhotosAllowed: true,
   swimmingLevel: "",
-  hasBeenToCampBefore: false,
+  hasBeenToCampBefore: true,
   howDidYouHearAboutUs: "",
   friendCabinRequest: "",
-  gender: "",
+  sex: "",
   tShirtSize: "",
 };
 
