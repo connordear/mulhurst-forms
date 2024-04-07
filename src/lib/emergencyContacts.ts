@@ -20,7 +20,7 @@ export const contactSchema = z.object({
 
 export type Contact = z.infer<typeof contactSchema>;
 
-const defaultContactFields: Contact = {
+export const defaultContactFields: Contact = {
   firstName: "",
   lastName: "",
   phone: "",
@@ -28,13 +28,13 @@ const defaultContactFields: Contact = {
 };
 
 export const emergencyContactsSchema = z.object({
-  contacts: z.array(contactSchema),
+  contacts: z.array(contactSchema).min(2),
 });
 
 export type EmergencyContact = z.infer<typeof emergencyContactsSchema>;
 
 export const defaultEmergencyContactInfo: EmergencyContact = {
-  contacts: [defaultContactFields, defaultContactFields, defaultContactFields],
+  contacts: [defaultContactFields, defaultContactFields],
 };
 
 export const contactInfoAtom = atomWithStorage<EmergencyContact>(

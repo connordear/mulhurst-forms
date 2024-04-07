@@ -1,6 +1,7 @@
 "use client";
 import {
   Contact,
+  defaultContactFields,
   EmergencyContact,
   relationshipOptions,
 } from "@/lib/emergencyContacts";
@@ -33,13 +34,22 @@ const EmergencyContactForm = ({
   form,
   onSubmit,
 }: EmergencyContactFormPropsType) => {
-  console.log(form);
   function onSubmitEmergencyContactInfo(values: EmergencyContact) {
-    console.log(values);
     onSubmit(values);
   }
 
   const contacts = form.watch("contacts", [] as Contact[]);
+
+  function onAddAdditionalContact() {
+    form.setValue("contacts", [...contacts, defaultContactFields]);
+  }
+
+  function onRemoveContact(index: number) {
+    const newContacts = [...contacts];
+    newContacts.splice(index, 1);
+    form.setValue("contacts", newContacts);
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -61,8 +71,22 @@ const EmergencyContactForm = ({
               return (
                 <Card key={index}>
                   <CardHeader>
-                    <CardDescription>
+                    <CardDescription
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
                       Emergency Contact {index + 1}
+                      {index > 1 && (
+                        <Button
+                          onClick={() => onRemoveContact(index)}
+                          variant="secondary"
+                        >
+                          Remove Contact
+                        </Button>
+                      )}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -151,7 +175,19 @@ const EmergencyContactForm = ({
                 </Card>
               );
             })}
-            <Button type="submit">Next</Button>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Button type="submit">Next</Button>
+              {contacts.length < 5 && (
+                <Button onClick={onAddAdditionalContact} variant="secondary">
+                  Add Additional Contact
+                </Button>
+              )}
+            </div>
           </form>
         </Form>
       </CardContent>
