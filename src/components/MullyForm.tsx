@@ -33,7 +33,7 @@ import LoadingCard from "./LoadingCard";
 import MedicalForm from "./MedicalForm";
 import PaymentForm from "./PaymentForm";
 import { Button } from "./ui/button";
-import { ScrollArea } from "./ui/scroll-area";
+import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
 const CAMPER_INFO = "camperInfo";
 const MEDICAL_INFO = "medicalInfo";
@@ -172,8 +172,8 @@ const MullyForm = () => {
       }}
       defaultValue={CAMPER_INFO}
     >
-      <TabsList className="w-full">
-        <ScrollArea className="whitespace-nowrap rounded-md">
+      <ScrollArea className="rounded-md">
+        <TabsList className="w-full">
           <TabsTrigger
             value="camperInfo"
             className={getTabStyle(camperForm.formState)}
@@ -193,8 +193,9 @@ const MullyForm = () => {
             Emergency Contacts
           </TabsTrigger>
           <TabsTrigger value="paymentInfo">Payment Info</TabsTrigger>
-        </ScrollArea>
-      </TabsList>
+        </TabsList>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
       <TabsContent value="camperInfo">
         {programs ? (
           <CamperForm
