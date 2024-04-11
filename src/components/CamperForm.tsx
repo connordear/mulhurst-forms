@@ -325,6 +325,35 @@ const CamperForm = ({
 
             <FormField
               control={camperForm.control}
+              name="hasBeenToCampBefore"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Has the camper been to camp before?</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={(v: "yes" | "no") => {
+                        return field.onChange(v === "yes");
+                      }}
+                      value={field.value ? "yes" : "no"}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="yes" id="camp-before-yes" />
+                        <Label htmlFor="camp-before-yes">Yes</Label>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="no" id="camp-before-no" />
+                        <Label htmlFor="camp-before-no">No</Label>
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={camperForm.control}
               name="gender"
               render={({ field }) => (
                 <FormItem>
@@ -386,10 +415,28 @@ const CamperForm = ({
                 <FormItem>
                   <FormLabel>Are photos allowed?</FormLabel>
                   <FormDescription>
-                    This should be filled out by the parent/guardian of the
-                    camper. By selecting &quot;Yes&quot;, you are giving
-                    permission for Mulhurst Camp to use photos of your camper
-                    for promotional purposes.
+                    At Mulhurst we like to take photos and videos during camp
+                    for archives, powerpoint updates for meetings, PR, marketing
+                    and promotional use.
+                    <br />
+                    <br />
+                    Please complete the following section either giving or
+                    denying permission to release personal information in the
+                    context of Mulhurst Camp setting as indicated below. Please
+                    let your child know prior to camp if they are not allowed to
+                    be in pictures or videos, so they are not disappointed when
+                    we do not allow them to be in a photograph.
+                    <br />
+                    <br />
+                    Mulhurst Lutheran Church Camp follows the principles under
+                    the Provincial Information Privacy Act (PIPA) as it relates
+                    to non-profit organizations. The use of photographs and/or
+                    videos of me or my child, if applicant is under 18 years of
+                    age, for the use of Mulhurst Camp publications, documents,
+                    displays or website use. By clicking box below identified as
+                    &quot;yes&quot; I am in agreeance and give consent to the
+                    use of my child&apos;s photo and/or video to be used for the
+                    purposes outlined above.
                   </FormDescription>
                   <FormControl>
                     <RadioGroup
@@ -398,19 +445,17 @@ const CamperForm = ({
                       }}
                       value={field.value ? "yes" : "no"}
                     >
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 pt-2">
                         <RadioGroupItem value="yes" id="yes" />
                         <Label htmlFor="yes">
-                          Yes, my child&apos;s photos may appear in brochures or
-                          other camp promotional material.
+                          Yes, I consent to Mulhurst Camp&apos;s use of my
+                          child&apos;s photos/video for promotion
                         </Label>
                       </div>
 
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="no" id="no" />
-                        <Label htmlFor="no">
-                          No, my child&apos;s photos may not appear in brochures
-                        </Label>
+                        <Label htmlFor="no">No, I do not consent</Label>
                       </div>
                     </RadioGroup>
                   </FormControl>
@@ -418,64 +463,61 @@ const CamperForm = ({
                 </FormItem>
               )}
             />
-            <div className="flex flex-col md:flex-row justify-between gap-5">
-              <FormField
-                control={camperForm.control}
-                name="hasBeenToCampBefore"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Has the camper been to camp before?</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={(v: "yes" | "no") => {
-                          return field.onChange(v === "yes");
-                        }}
-                        value={field.value ? "yes" : "no"}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="yes" id="camp-before-yes" />
-                          <Label htmlFor="camp-before-yes">Yes</Label>
-                        </div>
 
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="no" id="camp-before-no" />
-                          <Label htmlFor="camp-before-no">No</Label>
-                        </div>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={camperForm.control}
-                name="howDidYouHearAboutUs"
-                render={({ field }) => (
-                  <FormItem style={{ maxWidth: "470px" }}>
-                    <FormLabel>How did you hear about us?</FormLabel>
-                    <FormDescription>
-                      This information will help us get a better understanding
-                      of how we can encourage growth within our camp community.
-                    </FormDescription>
-                    <FormControl>
-                      <select
-                        {...field}
-                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        style={{ maxWidth: "100%" }}
-                      >
-                        {heardAboutUsOptions.map((o) => (
-                          <option key={o.value} value={o.value}>
-                            {o.label}
-                          </option>
-                        ))}
-                      </select>
-                    </FormControl>
+            <FormField
+              control={camperForm.control}
+              name="howDidYouHearAboutUs"
+              render={({ field }) => (
+                <FormItem style={{ maxWidth: "470px" }}>
+                  <FormLabel>How did you hear about us?</FormLabel>
+                  <FormDescription>
+                    This information will help us get a better understanding of
+                    how we can encourage growth within our camp community.
+                  </FormDescription>
+                  <FormControl>
+                    <select
+                      {...field}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      style={{ maxWidth: "100%" }}
+                    >
+                      {heardAboutUsOptions.map((o) => (
+                        <option key={o.value} value={o.value}>
+                          {o.label}
+                        </option>
+                      ))}
+                    </select>
+                  </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={camperForm.control}
+              name="parentSignature"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Parent Signature</FormLabel>
+                  <FormDescription>
+                    I hereby release Mulhurst Lutheran Church Camp Association,
+                    it&apos;s agents, members and employees not holding them for
+                    any  liability for any accident, injury, or any claim
+                    arising out of above camper&apos;s us of Mulhurst Camp or
+                    any of its facilities, or virtue of participation in any of
+                    its programs. In case of emergency, I understand that every
+                    effort will be made to contact me. In the event that I
+                    cannot be reached, I hereby authorize the camp personnel to
+                    secure medical advice and services as may be deemed
+                    necessary for the safety of my child.
+                  </FormDescription>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <Button type="submit">Next</Button>
           </form>

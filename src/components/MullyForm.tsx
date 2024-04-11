@@ -174,6 +174,7 @@ const MullyForm = () => {
         });
       }}
       defaultValue={CAMPER_INFO}
+      style={{ maxWidth: "700px" }}
     >
       <ScrollArea className="rounded-md">
         <TabsList className="w-full">

@@ -87,6 +87,7 @@ export const camperFormSchema = z.object({
   friendCabinRequest: z.string().max(100),
   gender: z.string().min(1, { message: "Required" }),
   tShirtSize: z.string().min(1, { message: "T-Shirt Size is required" }),
+  parentSignature: z.string().min(1, { message: "Signature is required" }),
 });
 
 export type CamperInfo = z.infer<typeof camperFormSchema>;
@@ -113,6 +114,7 @@ export const defaultCamperInfo: CamperInfo = {
   friendCabinRequest: "",
   gender: "",
   tShirtSize: TShirtSize.M,
+  parentSignature: "",
 };
 
 export const camperInfoAtom = atomWithStorage<CamperInfo>(
