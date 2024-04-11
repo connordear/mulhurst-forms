@@ -102,7 +102,10 @@ const MullyForm = () => {
     setCamperData(defaultCamperInfo);
     setMedicalData(defaultMedicalInfo);
     setContactInfo(defaultEmergencyContactInfo);
-    camperForm.reset();
+    camperForm.reset({
+      ...defaultCamperInfo,
+      program: programs ? programs[0].id : 0,
+    });
     medicalForm.reset();
     contactForm.reset();
   }

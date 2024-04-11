@@ -299,65 +299,6 @@ const CamperForm = ({
               />
             </div>
 
-            <div className="flex flex-col md:flex-row justify-between gap-5">
-              <FormField
-                control={camperForm.control}
-                name="hasBeenToCampBefore"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Has the camper been to camp before?</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={(v: "yes" | "no") => {
-                          return field.onChange(v === "yes");
-                        }}
-                        value={field.value ? "yes" : "no"}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="yes" id="camp-before-yes" />
-                          <Label htmlFor="camp-before-yes">Yes</Label>
-                        </div>
-
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="no" id="camp-before-no" />
-                          <Label htmlFor="camp-before-no">No</Label>
-                        </div>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={camperForm.control}
-                name="arePhotosAllowed"
-                render={({ field }) => (
-                  <FormItem className="flex-2 px-10">
-                    <FormLabel>Are photos allowed?</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={(v: "yes" | "no") => {
-                          return field.onChange(v === "yes");
-                        }}
-                        value={field.value ? "yes" : "no"}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="yes" id="yes" />
-                          <Label htmlFor="yes">Yes</Label>
-                        </div>
-
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="no" id="no" />
-                          <Label htmlFor="no">No</Label>
-                        </div>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
             <FormField
               control={camperForm.control}
               name="swimmingLevel"
@@ -447,32 +388,101 @@ const CamperForm = ({
 
             <FormField
               control={camperForm.control}
-              name="howDidYouHearAboutUs"
+              name="arePhotosAllowed"
               render={({ field }) => (
-                <FormItem style={{ maxWidth: "470px" }}>
-                  <FormLabel>How did you hear about us?</FormLabel>
+                <FormItem>
+                  <FormLabel>Are photos allowed?</FormLabel>
                   <FormDescription>
-                    This information will help us get a better understanding of
-                    how we can encourage growth within our camp community.
+                    This should be filled out by the parent/guardian of the
+                    camper. By selecting &quot;Yes&quot;, you are giving
+                    permission for Mulhurst Camp to use photos of your camper
+                    for promotional purposes.
                   </FormDescription>
                   <FormControl>
-                    <select
-                      {...field}
-                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      style={{ maxWidth: "100%" }}
+                    <RadioGroup
+                      onValueChange={(v: "yes" | "no") => {
+                        return field.onChange(v === "yes");
+                      }}
+                      value={field.value ? "yes" : "no"}
                     >
-                      {heardAboutUsOptions.map((o) => (
-                        <option key={o.value} value={o.value}>
-                          {o.label}
-                        </option>
-                      ))}
-                    </select>
-                  </FormControl>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="yes" id="yes" />
+                        <Label htmlFor="yes">
+                          Yes, my child&apos;s photos may appear in brochures or
+                          other camp promotional material.
+                        </Label>
+                      </div>
 
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="no" id="no" />
+                        <Label htmlFor="no">
+                          No, my child&apos;s photos may not appear in brochures
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <div className="flex flex-col md:flex-row justify-between gap-5">
+              <FormField
+                control={camperForm.control}
+                name="hasBeenToCampBefore"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Has the camper been to camp before?</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={(v: "yes" | "no") => {
+                          return field.onChange(v === "yes");
+                        }}
+                        value={field.value ? "yes" : "no"}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="yes" id="camp-before-yes" />
+                          <Label htmlFor="camp-before-yes">Yes</Label>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="no" id="camp-before-no" />
+                          <Label htmlFor="camp-before-no">No</Label>
+                        </div>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={camperForm.control}
+                name="howDidYouHearAboutUs"
+                render={({ field }) => (
+                  <FormItem style={{ maxWidth: "470px" }}>
+                    <FormLabel>How did you hear about us?</FormLabel>
+                    <FormDescription>
+                      This information will help us get a better understanding
+                      of how we can encourage growth within our camp community.
+                    </FormDescription>
+                    <FormControl>
+                      <select
+                        {...field}
+                        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        style={{ maxWidth: "100%" }}
+                      >
+                        {heardAboutUsOptions.map((o) => (
+                          <option key={o.value} value={o.value}>
+                            {o.label}
+                          </option>
+                        ))}
+                      </select>
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <Button type="submit">Next</Button>
           </form>

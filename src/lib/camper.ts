@@ -111,7 +111,7 @@ export const defaultCamperInfo: CamperInfo = {
   arePhotosAllowed: true,
   swimmingLevel: SwimmingLevel.BEGINNER,
   hasBeenToCampBefore: true,
-  howDidYouHearAboutUs: "",
+  howDidYouHearAboutUs: heardAboutUsOptions[0].value,
   friendCabinRequest: "",
   sex: "",
   tShirtSize: TShirtSize.M,
