@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+.form-width {
+  max-width: 700px;
+  flex: 1;
+}
+
 .bg-gradient {
   background: hsla(148, 71%, 16%, 1);
 

@@ -174,7 +174,12 @@ const MullyForm = () => {
         });
       }}
       defaultValue={CAMPER_INFO}
-      style={{ maxWidth: "700px" }}
+      style={{
+        maxWidth: "700px",
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+      }}
     >
       <ScrollArea className="rounded-md">
         <TabsList className="w-full">
@@ -200,7 +205,7 @@ const MullyForm = () => {
         </TabsList>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
-      <TabsContent value="camperInfo">
+      <TabsContent value="camperInfo" className="form-width">
         {programs ? (
           <CamperForm
             programs={programs}
@@ -214,7 +219,7 @@ const MullyForm = () => {
           <LoadingCard />
         )}
       </TabsContent>
-      <TabsContent value="medicalInfo">
+      <TabsContent value="medicalInfo" className="form-width">
         <MedicalForm
           form={medicalForm}
           onSubmit={(values) => {
@@ -223,7 +228,7 @@ const MullyForm = () => {
           }}
         />
       </TabsContent>
-      <TabsContent value="emergencyContacts">
+      <TabsContent value="emergencyContacts" className="form-width">
         <EmergencyContactForm
           form={contactForm}
           onSubmit={(values) => {
@@ -232,7 +237,7 @@ const MullyForm = () => {
           }}
         />
       </TabsContent>
-      <TabsContent value="paymentInfo">
+      <TabsContent value="paymentInfo" className="form-width">
         {selectedProgram && purchaseInfo && (
           <PaymentForm
             priceId={purchaseInfo.priceId}
