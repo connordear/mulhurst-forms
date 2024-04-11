@@ -178,7 +178,7 @@ const CamperForm = ({
                 name="firstName"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>Camper First Name</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -191,7 +191,7 @@ const CamperForm = ({
                 name="lastName"
                 render={({ field }) => (
                   <FormItem className="flex-1">
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>Camper Last Name</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -332,7 +332,7 @@ const CamperForm = ({
                 control={camperForm.control}
                 name="arePhotosAllowed"
                 render={({ field }) => (
-                  <FormItem className="flex-2">
+                  <FormItem className="flex-2 px-10">
                     <FormLabel>Are photos allowed?</FormLabel>
                     <FormControl>
                       <RadioGroup

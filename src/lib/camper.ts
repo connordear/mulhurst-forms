@@ -9,13 +9,25 @@ export enum SwimmingLevel {
 }
 
 export const swimmingLevelOptions = [
-  { value: SwimmingLevel.NONE, label: "None" },
-  { value: SwimmingLevel.BEGINNER, label: "Beginner" },
-  { value: SwimmingLevel.INTERMEDIATE, label: "Intermediate" },
-  { value: SwimmingLevel.ADVANCED, label: "Advanced" },
+  {
+    value: SwimmingLevel.NONE,
+    label: "None (Must wear life jacket in shallow water)",
+  },
+  {
+    value: SwimmingLevel.BEGINNER,
+    label: "Beginner (has taken some swimming lessons)",
+  },
+  {
+    value: SwimmingLevel.INTERMEDIATE,
+    label: "Intermediate (confident in deep water)",
+  },
+  { value: SwimmingLevel.ADVANCED, label: "Advanced (strong swimmer)" },
 ];
 
 export enum TShirtSize {
+  YOUTH_S = "YOUTH_S",
+  YOUTH_M = "YOUTH_M",
+  YOUTH_L = "YOUTH_L",
   XS = "XS",
   S = "S",
   M = "M",
@@ -25,6 +37,9 @@ export enum TShirtSize {
 }
 
 export const tShirtSizeOptions = [
+  { value: TShirtSize.YOUTH_S, label: "Youth S" },
+  { value: TShirtSize.YOUTH_M, label: "Youth M" },
+  { value: TShirtSize.YOUTH_L, label: "Youth L" },
   { value: TShirtSize.XS, label: "XS" },
   { value: TShirtSize.S, label: "S" },
   { value: TShirtSize.M, label: "M" },
