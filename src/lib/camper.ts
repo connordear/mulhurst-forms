@@ -28,7 +28,6 @@ export enum TShirtSize {
   YOUTH_S = "YOUTH_S",
   YOUTH_M = "YOUTH_M",
   YOUTH_L = "YOUTH_L",
-  XS = "XS",
   S = "S",
   M = "M",
   L = "L",
@@ -40,7 +39,6 @@ export const tShirtSizeOptions = [
   { value: TShirtSize.YOUTH_S, label: "Youth S" },
   { value: TShirtSize.YOUTH_M, label: "Youth M" },
   { value: TShirtSize.YOUTH_L, label: "Youth L" },
-  { value: TShirtSize.XS, label: "XS" },
   { value: TShirtSize.S, label: "S" },
   { value: TShirtSize.M, label: "M" },
   { value: TShirtSize.L, label: "L" },
@@ -87,7 +85,7 @@ export const camperFormSchema = z.object({
   hasBeenToCampBefore: z.boolean(),
   howDidYouHearAboutUs: z.string().min(1, { message: "Required" }),
   friendCabinRequest: z.string().max(100),
-  sex: z.string().min(1, { message: "Required" }),
+  gender: z.string().min(1, { message: "Required" }),
   tShirtSize: z.string().min(1, { message: "T-Shirt Size is required" }),
 });
 
@@ -113,7 +111,7 @@ export const defaultCamperInfo: CamperInfo = {
   hasBeenToCampBefore: true,
   howDidYouHearAboutUs: heardAboutUsOptions[0].value,
   friendCabinRequest: "",
-  sex: "",
+  gender: "",
   tShirtSize: TShirtSize.M,
 };
 

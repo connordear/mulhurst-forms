@@ -325,19 +325,12 @@ const CamperForm = ({
 
             <FormField
               control={camperForm.control}
-              name="sex"
+              name="gender"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Sex</FormLabel>
+                  <FormLabel>Gender</FormLabel>
                   <FormControl>
-                    <select
-                      {...field}
-                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      style={{ maxWidth: "100%" }}
-                    >
-                      <option value="female">Female</option>
-                      <option value="male">Male</option>
-                    </select>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
