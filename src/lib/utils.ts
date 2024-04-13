@@ -2,9 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 import { clsx, type ClassValue } from "clsx";
 import { useAtomValue } from "jotai";
 import { twMerge } from "tailwind-merge";
-import { camperInfoAtom } from "./camper";
-import { contactInfoAtom } from "./emergencyContacts";
-import { medicalInfoAtom } from "./medical";
+import { CamperInfo, camperInfoAtom } from "./camper";
+import { EmergencyContact, contactInfoAtom } from "./emergencyContacts";
+import { MedicalInfo, medicalInfoAtom } from "./medical";
+
+export type AllFormValues = CamperInfo &
+  MedicalInfo &
+  EmergencyContact & { sessionId: string };
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
