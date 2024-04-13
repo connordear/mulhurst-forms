@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   CamperInfo,
+  NO_SIBLING,
   heardAboutUsOptions,
   swimmingLevelOptions,
   tShirtSizeOptions,
@@ -23,6 +24,7 @@ import { getDaysOfWeek } from "@/utils/dateUtils";
 import { Label } from "@radix-ui/react-label";
 import { useEffect, useMemo } from "react";
 import { UseFormReturn } from "react-hook-form";
+import ToggleField from "./ToggleField";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader } from "./ui/card";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
@@ -492,6 +494,29 @@ const CamperForm = ({
                 </FormItem>
               )}
             />
+
+            {selectedProgram?.canApplySiblingDiscount && (
+              <FormField
+                name="siblingNameForDiscount"
+                control={camperForm.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Sibling Discount</FormLabel>
+                    <FormControl>
+                      <ToggleField
+                        id="siblingNameForDiscount"
+                        fieldLabel="Please enter the sibling's name here. This will apply a $25 discount to your registration. You may apply this discount to each sibling's registration."
+                        toggleLabel="I will be registering/have registered a sibling for camp."
+                        noLabel="No"
+                        offValue={NO_SIBLING}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <FormField
               control={camperForm.control}

@@ -55,6 +55,8 @@ export const heardAboutUsOptions = [
   { value: "other", label: "Other" },
 ];
 
+export const NO_SIBLING = "No sibling";
+
 export const addressSchema = z.object({
   line1: z.string().min(1, { message: "Address is required" }).max(100),
   line2: z.string().min(0).max(100),
@@ -88,6 +90,10 @@ export const camperFormSchema = z.object({
   gender: z.string().min(1, { message: "Required" }),
   tShirtSize: z.string().min(1, { message: "T-Shirt Size is required" }),
   parentSignature: z.string().min(1, { message: "Signature is required" }),
+  siblingNameForDiscount: z
+    .string()
+    .min(1, { message: "Sibling name is required to claim discount" })
+    .max(50),
 });
 
 export type CamperInfo = z.infer<typeof camperFormSchema>;
@@ -115,6 +121,7 @@ export const defaultCamperInfo: CamperInfo = {
   gender: "",
   tShirtSize: TShirtSize.M,
   parentSignature: "",
+  siblingNameForDiscount: NO_SIBLING,
 };
 
 export const camperInfoAtom = atomWithStorage<CamperInfo>(

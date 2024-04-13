@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getPrograms } from "@/lib/api";
 import {
   CamperInfo,
+  NO_SIBLING,
   camperFormSchema,
   camperInfoAtom,
   defaultCamperInfo,
@@ -65,6 +66,7 @@ const MullyForm = () => {
   });
 
   const selectedDaysOfWeek = camperForm.watch("daysOfWeek");
+  const siblingNameForDiscount = camperForm.watch("siblingNameForDiscount");
   const selectedProgram = useSelectedProgram(programs, camperForm);
 
   const purchaseInfo = useMemo(() => {
@@ -243,6 +245,11 @@ const MullyForm = () => {
             priceId={purchaseInfo.priceId}
             quantity={purchaseInfo.quantity}
             invalidForms={invalidForms}
+            couponCode={
+              siblingNameForDiscount !== NO_SIBLING
+                ? process.env.NEXT_PUBLIC_SIBLING_COUPON_CODE
+                : undefined
+            }
           />
         )}
       </TabsContent>

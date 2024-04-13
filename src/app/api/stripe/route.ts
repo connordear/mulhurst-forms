@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
     // Create Checkout Sessions from body params.
     const priceId = req.nextUrl.searchParams.get("price_id");
     const quantity = req.nextUrl.searchParams.get("quantity") || 1;
+    const coupon = req.nextUrl.searchParams.get("couponCode");
     if (!priceId) {
       throw { statusCode: 400, message: "Price ID is required" };
     }
@@ -20,6 +21,7 @@ export async function POST(req: NextRequest) {
           quantity: quantity,
         },
       ],
+      ...(coupon && { discounts: [{ coupon }] }),
       mode: "payment",
       return_url: `${req.headers.get(
         "origin"

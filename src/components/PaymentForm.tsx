@@ -13,23 +13,33 @@ const stripePromise = loadStripe(
 type PaymentFormPropsType = {
   priceId: string | undefined;
   quantity: number;
+  couponCode: string | undefined;
   invalidForms: string[];
 };
 
 const PaymentForm = ({
   priceId,
   quantity,
+  couponCode,
   invalidForms,
 }: PaymentFormPropsType) => {
   const fetchClientSecret = useCallback(() => {
     // Create a Checkout Session
     if (!priceId) return Promise.resolve("");
-    return fetch(`/api/stripe?price_id=${priceId}&quantity=${quantity}`, {
-      method: "POST",
-    })
+    const couponCodeUri = couponCode ? `&couponCode=${couponCode}` : "";
+    return fetch(
+      `/api/stripe?price_id=${priceId}&quantity=${quantity}${couponCodeUri}`,
+      {
+        method: "POST",
+      }
+    )
+      .catch((err) => {
+        console.error(err);
+        return Promise.reject(err);
+      })
       .then((res) => res.json())
       .then((data) => data.clientSecret);
-  }, [priceId, quantity]);
+  }, [couponCode, priceId, quantity]);
 
   if (!fetchClientSecret) {
     return <div>Price ID not found</div>;
