@@ -3,12 +3,17 @@ import {
   MedicalInfo,
   NO_ALLERGIES,
   NO_EPIPEN,
+  NO_MEDICAL_CONDITIONS,
+  NO_MEDICATIONS_NOT_TAKING_AT_CAMP,
   NO_MEDICATIONS_TREATMENTS,
+  overTheCounterMedications,
 } from "@/lib/medical";
+import { Label } from "@radix-ui/react-label";
 import { UseFormReturn } from "react-hook-form";
 import ToggleField from "./ToggleField";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader } from "./ui/card";
+import { Checkbox } from "./ui/checkbox";
 import {
   Form,
   FormControl,
@@ -30,6 +35,7 @@ const MedicalForm = ({ form: medicalForm, onSubmit }: MedicalFormPropsType) => {
     console.log(values);
     onSubmit(values);
   }
+
   return (
     <Card>
       <CardHeader>
@@ -196,26 +202,70 @@ const MedicalForm = ({ form: medicalForm, onSubmit }: MedicalFormPropsType) => {
             />
 
             <FormField
+              name="regularMedicationsNotTakingAtCamp"
               control={medicalForm.control}
-              name="areOverTheCounterMedicationsAllowed"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Regular Medications Not Taking At CAmp</FormLabel>
+                  <FormControl>
+                    <ToggleField
+                      id={"regularMedicationsNotTakingAtCamp"}
+                      toggleLabel={
+                        "Is there any medication your child is taking that they will not be taking at camp?"
+                      }
+                      fieldLabel={
+                        "Please list all medications your child is taking that they will not be taking at camp."
+                      }
+                      noLabel={NO_MEDICATIONS_NOT_TAKING_AT_CAMP}
+                      offValue={NO_MEDICATIONS_NOT_TAKING_AT_CAMP}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={medicalForm.control}
+              name="allowedOverTheCounterMedications"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Are over-the-counter medications allowed?
+                    First Aid attendant will determine if there is a need for an
+                    over-the-counter medication. Please confirm below which over
+                    the counter medications could be used.
                   </FormLabel>
                   <FormControl>
-                    <select
-                      {...field}
-                      value={field.value ? "yes" : "no"}
-                      onChange={(e) =>
-                        field.onChange(e.currentTarget.value === "yes")
-                      }
-                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      style={{ maxWidth: "100%" }}
-                    >
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                    </select>
+                    <div>
+                      {overTheCounterMedications.map((medication) => (
+                        <div
+                          key={medication.key}
+                          className="flex items-center gap-3"
+                        >
+                          <Checkbox
+                            checked={field.value.includes(medication.key)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                field.onChange([
+                                  ...field.value,
+                                  medication.key,
+                                ]);
+                              } else {
+                                field.onChange(
+                                  field.value.filter(
+                                    (v) => v !== medication.key
+                                  )
+                                );
+                              }
+                            }}
+                          />
+                          <Label htmlFor={medication.key}>
+                            {medication.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -229,12 +279,24 @@ const MedicalForm = ({ form: medicalForm, onSubmit }: MedicalFormPropsType) => {
                 <FormItem>
                   <FormLabel>Medical Conditions</FormLabel>
                   <FormControl>
-                    <Textarea {...field} />
+                    <ToggleField
+                      id={"medicalConditions"}
+                      toggleLabel={
+                        "Does your child have any medical conditions? E.g. ADD/ADHD, bedwetting, behavioural issues, sleep walking, etc."
+                      }
+                      fieldLabel={
+                        "Please list all medical conditions and treatments."
+                      }
+                      noLabel={NO_MEDICAL_CONDITIONS}
+                      offValue={NO_MEDICAL_CONDITIONS}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={medicalForm.control}
               name="dietaryRestrictions"
