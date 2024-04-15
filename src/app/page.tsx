@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   return (
     <main className="md:flex min-h-screen flex-col items-center md:p-24 p-10 bg-gradient">
+      <link rel="icon" href="/mully.png" sizes="any" />
       <Card className="mb-10">
         <CardHeader>
           <h1 className="text-4xl font-bold color-white text-center">
