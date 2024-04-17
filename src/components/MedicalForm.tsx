@@ -206,7 +206,7 @@ const MedicalForm = ({ form: medicalForm, onSubmit }: MedicalFormPropsType) => {
               control={medicalForm.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Regular Medications Not Taking At CAmp</FormLabel>
+                  <FormLabel>Regular Medications Not Taking At Camp</FormLabel>
                   <FormControl>
                     <ToggleField
                       id={"regularMedicationsNotTakingAtCamp"}
