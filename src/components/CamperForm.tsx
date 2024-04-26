@@ -74,7 +74,18 @@ const CamperForm = ({
     <Card>
       <CardHeader>
         <CardDescription>
-          This information will be used to register your camper
+          Welcome to Mulhurst Camp registration! We are trying a new online
+          registration portal this year. Your progress will be saved as you work
+          through the forms.
+          <br />
+          <br />
+          If you wish to register a camper for multiple weeks, your information
+          will be saved after each submission, so you can register with the same
+          information for a separate camp.
+          <br />
+          <br />
+          You can reset your progress at any time by clicking the &quot;Clear
+          Form&quot; button.
         </CardDescription>
       </CardHeader>
       <CardContent>
