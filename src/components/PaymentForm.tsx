@@ -25,7 +25,7 @@ const PaymentForm = ({
 }: PaymentFormPropsType) => {
   const fetchClientSecret = useCallback(() => {
     // Create a Checkout Session
-    if (!priceId) return Promise.resolve("");
+    if (!priceId || invalidForms.length) return Promise.resolve("");
     const couponCodeUri = couponCode ? `&couponCode=${couponCode}` : "";
     return fetch(
       `/api/stripe?price_id=${priceId}&quantity=${quantity}${couponCodeUri}`,
@@ -39,11 +39,7 @@ const PaymentForm = ({
       })
       .then((res) => res.json())
       .then((data) => data.clientSecret);
-  }, [couponCode, priceId, quantity]);
-
-  if (!fetchClientSecret) {
-    return <div>Price ID not found</div>;
-  }
+  }, [couponCode, invalidForms.length, priceId, quantity]);
 
   if (!priceId) {
     return <div>Price ID not found</div>;
@@ -72,7 +68,10 @@ const PaymentForm = ({
 
   return (
     <Card>
-      <CardHeader>Submit your payment here.</CardHeader>
+      <CardHeader>
+        Submit your payment here. If your forms are complete but the payment
+        information doesn&apos;t load, please try reloading the page.
+      </CardHeader>
       <CardContent>
         <div id="checkout">
           <EmbeddedCheckoutProvider
