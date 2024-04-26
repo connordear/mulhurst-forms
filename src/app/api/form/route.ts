@@ -23,7 +23,6 @@ export async function POST(req: Request) {
   const supabase = createRouteHandlerClient<Database>({
     cookies: () => cookieStore,
   });
-  console.log(await supabase.auth.getUser());
   const values = (await req.json()) as AllFormValues;
   const { data: regData, error: regError } = await supabase
     .from("registrations")
