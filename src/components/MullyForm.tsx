@@ -34,6 +34,7 @@ import LoadingCard from "./LoadingCard";
 import MedicalForm from "./MedicalForm";
 import PaymentForm from "./PaymentForm";
 import { Button } from "./ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 
 const CAMPER_INFO = "camperInfo";
@@ -253,18 +254,34 @@ const MullyForm = () => {
           />
         )}
       </TabsContent>
-
-      <Button
-        onClick={clearForms}
-        variant="secondary"
-        style={{
-          position: "fixed",
-          bottom: "2rem",
-          right: "2rem",
-        }}
-      >
-        Clear Form
-      </Button>
+      <Popover>
+        <PopoverTrigger
+          asChild
+          style={{
+            position: "fixed",
+            bottom: "2rem",
+            right: "2rem",
+          }}
+        >
+          <Button variant={"secondary"}>Clear Form</Button>
+        </PopoverTrigger>
+        <PopoverContent
+          side="top"
+          align="end"
+          style={{
+            width: 350,
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+          }}
+        >
+          Are you sure you want to clear your forms? This action cannot be
+          reversed.
+          <Button onClick={clearForms} variant="destructive">
+            Reset Forms
+          </Button>
+        </PopoverContent>
+      </Popover>
     </Tabs>
   );
 };
