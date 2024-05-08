@@ -21,7 +21,9 @@ export async function POST(req: NextRequest) {
           quantity: quantity,
         },
       ],
-      ...(coupon && { discounts: [{ coupon }] }),
+      ...(coupon
+        ? { discounts: [{ coupon }] }
+        : { allow_promotion_codes: true }),
       mode: "payment",
       return_url: `${req.headers.get(
         "origin"
