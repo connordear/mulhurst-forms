@@ -57,6 +57,7 @@ const MullyForm = () => {
   const { data: programs, isLoading } = useQuery({
     queryKey: ["programs"],
     queryFn: getPrograms,
+    select: (data) => data.filter((program) => program.isActive),
   });
 
   const [camperData, setCamperData] = useAtom(camperInfoAtom);

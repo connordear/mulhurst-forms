@@ -6,4 +6,5 @@ export type Program = {
   weekPriceId: string;
   dayPriceId?: string;
   canApplySiblingDiscount: boolean;
+  isActive: boolean;
 };
