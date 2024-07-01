@@ -48,7 +48,6 @@ const RegistrationsTable = ({
 
   const registrations = useMemo(() => {
     if (!selectedTab) return [];
-    console.log(programRegistrationLookup);
     return programRegistrationLookup[selectedTab] ?? [];
   }, [programRegistrationLookup, selectedTab]);
 
@@ -146,20 +145,24 @@ const RegistrationsTable = ({
               <TableCell>{row.email}</TableCell>
               <TableCell>
                 <div className="flex-col"></div>
-                {(row.emergencyContacts as Contact[]).map((e) => (
-                  <div className="flex-1">
+                {(row.emergencyContacts as Contact[]).map((e, i) => (
+                  <div key={i} className="flex-1">
                     {e.firstName} {e.lastName}
                   </div>
                 ))}
               </TableCell>
               <TableCell className="flex-col">
-                {(row.emergencyContacts as Contact[]).map((e) => (
-                  <div className="flex-1">{e.phone}</div>
+                {(row.emergencyContacts as Contact[]).map((e, i) => (
+                  <div key={i} className="flex-1">
+                    {e.phone}
+                  </div>
                 ))}
               </TableCell>
               <TableCell className="flex-col">
-                {(row.emergencyContacts as Contact[]).map((e) => (
-                  <div className="flex-1">{e.email}</div>
+                {(row.emergencyContacts as Contact[]).map((e, i) => (
+                  <div key={i} className="flex-1">
+                    {e.email}
+                  </div>
                 ))}
               </TableCell>
             </TableRow>
