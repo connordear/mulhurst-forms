@@ -61,6 +61,14 @@ const RegistrationsTable = ({
   const programRegistrationsEmails = useMemo(() => {
     const emails: string[] = [];
     registrations.forEach((row) => {
+      emails.push(row.email);
+    });
+    return emails.join("; ");
+  }, [registrations]);
+
+  const emergencyContactsEmails = useMemo(() => {
+    const emails: string[] = [];
+    registrations.forEach((row) => {
       row.emergencyContacts.forEach((contact: Contact) => {
         emails.push(contact.email);
       });
@@ -105,7 +113,6 @@ const RegistrationsTable = ({
           ))}
         </SelectContent>
       </Select>
-
       <Table
         style={{
           maxWidth: "1000px",
@@ -114,13 +121,19 @@ const RegistrationsTable = ({
         <TableHeader>
           <TableRow>
             <TableHead>Camper Name</TableHead>
-            <TableHead>Email</TableHead>
+            <TableHead>
+              Email{" "}
+              <CopyButton
+                text={programRegistrationsEmails}
+                hoverText="Copy All Emails"
+              />
+            </TableHead>
             <TableHead>Contact Name(s)</TableHead>
             <TableHead>Contact Number(s)</TableHead>
             <TableHead>
               Contact Email(s){" "}
               <CopyButton
-                text={programRegistrationsEmails}
+                text={emergencyContactsEmails}
                 hoverText="Copy All Emails"
               />
             </TableHead>
