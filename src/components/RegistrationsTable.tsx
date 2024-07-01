@@ -8,7 +8,9 @@ import {
 } from "@/components/ui/table";
 import { Database } from "@/lib/supabase";
 
+import { Contact } from "@/lib/emergencyContacts";
 import { useEffect, useMemo, useState } from "react";
+import CopyButton from "./ui/copy-button";
 import {
   Select,
   SelectContent,
@@ -55,6 +57,16 @@ const RegistrationsTable = ({
       setSelectedTab(programs[0].key);
     }
   }, [programs, selectedTab]);
+
+  const programRegistrationsEmails = useMemo(() => {
+    const emails: string[] = [];
+    registrations.forEach((row) => {
+      row.emergencyContacts.forEach((contact: Contact) => {
+        emails.push(contact.email);
+      });
+    });
+    return emails.join("; ");
+  }, [registrations]);
 
   return (
     <div
@@ -103,8 +115,15 @@ const RegistrationsTable = ({
           <TableRow>
             <TableHead>Camper Name</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Contact Name</TableHead>
-            <TableHead>Contact Number</TableHead>
+            <TableHead>Contact Name(s)</TableHead>
+            <TableHead>Contact Number(s)</TableHead>
+            <TableHead>
+              Contact Email(s){" "}
+              <CopyButton
+                text={programRegistrationsEmails}
+                hoverText="Copy All Emails"
+              />
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -113,10 +132,22 @@ const RegistrationsTable = ({
               <TableCell>{row.firstName + " " + row.lastName}</TableCell>
               <TableCell>{row.email}</TableCell>
               <TableCell>
-                {(row.emergencyContacts?.[0] as any)?.firstName}
+                <div className="flex-col"></div>
+                {(row.emergencyContacts as Contact[]).map((e) => (
+                  <div className="flex-1">
+                    {e.firstName} {e.lastName}
+                  </div>
+                ))}
               </TableCell>
-              <TableCell>
-                {(row.emergencyContacts?.[0] as any)?.phone}
+              <TableCell className="flex-col">
+                {(row.emergencyContacts as Contact[]).map((e) => (
+                  <div className="flex-1">{e.phone}</div>
+                ))}
+              </TableCell>
+              <TableCell className="flex-col">
+                {(row.emergencyContacts as Contact[]).map((e) => (
+                  <div className="flex-1">{e.email}</div>
+                ))}
               </TableCell>
             </TableRow>
           ))}
