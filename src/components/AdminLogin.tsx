@@ -22,7 +22,9 @@ const AdminLogin = () => {
       if (res.ok) {
         setLoggedIn(true);
         setData(
-          (await res.json()).filter((row: { program: object }) => row.program)
+          (await res.json()).filter(
+            (row: { program: { name: string } }) => row.program
+          )
         );
       } else {
         throw new Error("Incorrect password");
