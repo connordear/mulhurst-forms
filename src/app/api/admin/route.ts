@@ -27,33 +27,16 @@ export async function POST(req: Request) {
 
   const { data, error } = await supabase.from("registrations").select(
     `
-    id,
-    firstName,
-    lastName,
-    email,
-    birthdate,
+    *,
     program (name),
-    daysOfWeek
+    emergencyContacts (firstName, lastName, email, phone, relationship)
     `
   );
-  const { data: emergencyContacts, error: emergencyContactsError } =
-    await supabase.from("emergencyContacts").select(
-      `
-    id,
-    firstName,
-    lastName,
-    email,
-    phone,
-    relationship,
-    forCamper
-    `
-    );
-  if (emergencyContactsError || error) {
-    log(emergencyContactsError || error);
+  if (error) {
+    log(error);
     return new Response(
       JSON.stringify({
-        error: (error ?? emergencyContactsError ?? { message: "unknown" })
-          .message,
+        error: (error ?? { message: "unknown" }).message,
       }),
       {
         status: 500,
@@ -61,12 +44,5 @@ export async function POST(req: Request) {
     );
   }
 
-  log(data, emergencyContacts);
-  data.forEach((row: any) => {
-    row.emergencyContacts = emergencyContacts.filter(
-      (contact: any) => contact.forCamper === row.id
-    );
-  });
-
-  return new Response(JSON.stringify(data));
+  return Response.json(data);
 }

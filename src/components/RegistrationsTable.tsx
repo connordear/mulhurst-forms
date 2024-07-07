@@ -1,15 +1,16 @@
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Database } from "@/lib/supabase";
 
-import { Contact } from "@/lib/emergencyContacts";
-import { useEffect, useMemo, useState } from "react";
+import { convertToTitleCase } from "@/lib/stringUtils";
+import { RegistrationInfo } from "@/lib/types";
+import { ReactNode, useEffect, useMemo, useState } from "react";
+import RegistrationSummary from "./RegistrationSummary";
+import RegistrationTableRow from "./RegistrationTableRow";
 import CopyButton from "./ui/copy-button";
 import {
   Select,
@@ -18,10 +19,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+
+const OMIT_COLUMNS = [
+  "id",
+  "program",
+  "lastName",
+  "paymentId",
+  "created_at",
+  "addressLine1",
+  "addressLine2",
+  "city",
+  "stateProv",
+  "postalZip",
+  "country",
+  "emergencyContacts",
+];
+
 type RegistrationsTablePropsType = {
-  registrations:
-    | Database["public"]["Tables"]["registrations"]["Row"][]
-    | undefined;
+  registrations: RegistrationInfo[] | undefined;
+};
+
+export type TableColumn<T> = {
+  key: keyof T;
+  header: ReactNode;
+  render?: (row: RegistrationInfo) => string | JSX.Element;
+  headerStyle?: React.CSSProperties;
+  cellStyle?: React.CSSProperties;
 };
 
 const RegistrationsTable = ({
@@ -32,10 +55,10 @@ const RegistrationsTable = ({
   const programRegistrationLookup = useMemo(() => {
     return (
       data?.reduce((acc, row) => {
-        const oldRegs = acc[(row.program as any).name] ?? [];
-        acc[(row.program as any).name] = [...oldRegs, row];
+        const oldRegs = acc[row.program.name] ?? [];
+        acc[row.program.name] = [...oldRegs, row];
         return acc;
-      }, {} as Record<string, any[]>) ?? {}
+      }, {} as Record<string, RegistrationInfo[]>) ?? {}
     );
   }, [data]);
 
@@ -59,8 +82,8 @@ const RegistrationsTable = ({
 
   const programRegistrationsEmails = useMemo(() => {
     const emails: string[] = [];
-    registrations.forEach((row) => {
-      emails.push(row.email);
+    registrations.forEach((r) => {
+      !!r.email && emails.push(r.email);
     });
     return emails.join("; ");
   }, [registrations]);
@@ -68,12 +91,110 @@ const RegistrationsTable = ({
   const emergencyContactsEmails = useMemo(() => {
     const emails: string[] = [];
     registrations.forEach((row) => {
-      row.emergencyContacts.forEach((contact: Contact) => {
+      row.emergencyContacts.forEach((contact) => {
         emails.push(contact.email);
       });
     });
     return emails.join("; ");
   }, [registrations]);
+
+  const registrationColumns: TableColumn<RegistrationInfo>[] = [
+    {
+      key: "firstName",
+      header: "Name",
+      render: (row: RegistrationInfo) => `${row.firstName} ${row.lastName}`,
+    },
+    {
+      key: "email",
+      header: (
+        <>
+          Email{" "}
+          <CopyButton
+            text={programRegistrationsEmails}
+            hoverText="Copy All Emails"
+          />
+        </>
+      ),
+    },
+    {
+      key: "emergencyContacts",
+      header: "Contact Name(s)",
+      render: (row: RegistrationInfo) => (
+        <div className="flex-col">
+          {row.emergencyContacts.map((e, i) => (
+            <div key={i} className="flex-1">
+              {e.firstName} {e.lastName}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      key: "emergencyContacts",
+      header: "Contact Number(s)",
+      render: (row: RegistrationInfo) => (
+        <div className="flex-col">
+          {row.emergencyContacts.map((e, i) => (
+            <div key={i} className="flex-1">
+              {e.phone}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      key: "emergencyContacts",
+      header: (
+        <>
+          Contact Email(s){" "}
+          <CopyButton
+            text={emergencyContactsEmails}
+            hoverText="Copy All Emails"
+          />
+        </>
+      ),
+      render: (row: RegistrationInfo) => (
+        <div className="flex-col">
+          {row.emergencyContacts.map((e, i) => (
+            <div key={i} className="flex-1">
+              {e.email}
+            </div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      key: "addressLine1",
+      header: "Address",
+      headerStyle: { minWidth: "200px" },
+      render: (row: RegistrationInfo) => (
+        <div className="flex-col">
+          <div>{row.addressLine1}</div>
+          <div>{row.addressLine2}</div>
+          <div>
+            {row.city}, {row.stateProv}
+          </div>
+          <div>{row.postalZip}</div>
+          <div>{row.country}</div>
+        </div>
+      ),
+    },
+  ];
+
+  const defaultColumns: TableColumn<Partial<RegistrationInfo>>[] = Object.keys(
+    data?.[0] ?? {}
+  )
+    .filter(
+      (d) =>
+        !registrationColumns.find((c) => c.key === d) &&
+        !OMIT_COLUMNS.includes(d)
+    )
+    .map((key) => ({
+      key: key as keyof RegistrationInfo,
+      header: convertToTitleCase(key),
+    }));
+
+  const allColumns = [...registrationColumns, ...defaultColumns];
 
   return (
     <div
@@ -99,7 +220,6 @@ const RegistrationsTable = ({
       >
         Mulhurst Registrations
       </h1>
-
       <Select onValueChange={(v) => setSelectedTab(v)} value={selectedTab}>
         <SelectTrigger>
           <SelectValue>{selectedTab ?? "Select a program"}</SelectValue>
@@ -112,6 +232,7 @@ const RegistrationsTable = ({
           ))}
         </SelectContent>
       </Select>
+      <RegistrationSummary data={registrations} />
       <Table
         style={{
           maxWidth: "1000px",
@@ -119,53 +240,23 @@ const RegistrationsTable = ({
       >
         <TableHeader>
           <TableRow>
-            <TableHead>Camper Name</TableHead>
-            <TableHead>
-              Email{" "}
-              <CopyButton
-                text={programRegistrationsEmails}
-                hoverText="Copy All Emails"
-              />
-            </TableHead>
-            <TableHead>Contact Name(s)</TableHead>
-            <TableHead>Contact Number(s)</TableHead>
-            <TableHead>
-              Contact Email(s){" "}
-              <CopyButton
-                text={emergencyContactsEmails}
-                hoverText="Copy All Emails"
-              />
-            </TableHead>
+            {allColumns.map((col, i) => (
+              <TableHead
+                key={`${col.key}-${i}`}
+                style={{ textWrap: "nowrap", ...col.headerStyle }}
+              >
+                {col.header}
+              </TableHead>
+            ))}
           </TableRow>
         </TableHeader>
         <TableBody>
           {registrations?.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.firstName + " " + row.lastName}</TableCell>
-              <TableCell>{row.email}</TableCell>
-              <TableCell>
-                <div className="flex-col"></div>
-                {(row.emergencyContacts as Contact[]).map((e, i) => (
-                  <div key={i} className="flex-1">
-                    {e.firstName} {e.lastName}
-                  </div>
-                ))}
-              </TableCell>
-              <TableCell className="flex-col">
-                {(row.emergencyContacts as Contact[]).map((e, i) => (
-                  <div key={i} className="flex-1">
-                    {e.phone}
-                  </div>
-                ))}
-              </TableCell>
-              <TableCell className="flex-col">
-                {(row.emergencyContacts as Contact[]).map((e, i) => (
-                  <div key={i} className="flex-1">
-                    {e.email}
-                  </div>
-                ))}
-              </TableCell>
-            </TableRow>
+            <RegistrationTableRow
+              key={row.id}
+              data={row}
+              columns={allColumns}
+            />
           ))}
         </TableBody>
       </Table>
