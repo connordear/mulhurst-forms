@@ -10,6 +10,10 @@ const RegistrationSummary = ({ data }: RegistrationSummaryPropsType) => {
     .filter((d) => d.allergies && d.allergies !== NO_ALLERGIES)
     .map((d) => `${d.firstName} ${d.lastName} - ${d.allergies}`);
 
+  const dietaryRestrictions = data
+    .filter((d) => d.dietaryRestrictions)
+    .map((d) => `${d.firstName} ${d.lastName} - ${d.dietaryRestrictions}`);
+
   const cabinRequests = data
     .filter((d) => d.friendCabinRequest)
     .map((d) => `${d.firstName} ${d.lastName} - ${d.friendCabinRequest}`);
@@ -28,6 +32,16 @@ const RegistrationSummary = ({ data }: RegistrationSummaryPropsType) => {
 
   return (
     <div className="grid grid-flow-row-dense gap-10 grid-cols-3 w-full">
+      {allergies.length > 0 && (
+        <div className="col-span-2">
+          <h1 style={styles.header}>Allergies</h1>
+          {allergies.map((a, i) => (
+            <div key={i}>
+              <p style={styles.summaryText}>{a}</p>
+            </div>
+          ))}
+        </div>
+      )}
       {
         <div>
           <h1 style={styles.header}>T-Shirt Size Counts</h1>
@@ -40,14 +54,13 @@ const RegistrationSummary = ({ data }: RegistrationSummaryPropsType) => {
           ))}
         </div>
       }
-      {noPhotos.length > 0 && (
-        <div>
-          <h1 style={styles.header}>No Photos</h1>
-          {noPhotos.map((d, i) => (
-            <div key={i} className="flex-1">
-              <p style={styles.summaryText}>
-                {d.firstName} {d.lastName}
-              </p>
+
+      {dietaryRestrictions.length > 0 && (
+        <div className="col-span-2">
+          <h1 style={styles.header}>Dietary Restrictions</h1>
+          {dietaryRestrictions.map((d, i) => (
+            <div key={i}>
+              <p style={styles.summaryText}>{d}</p>
             </div>
           ))}
         </div>
@@ -64,16 +77,6 @@ const RegistrationSummary = ({ data }: RegistrationSummaryPropsType) => {
           ))}
         </div>
       )}
-      {allergies.length > 0 && (
-        <div className="col-span-2">
-          <h1 style={styles.header}>Allergies</h1>
-          {allergies.map((a, i) => (
-            <div key={i}>
-              <p style={styles.summaryText}>{a}</p>
-            </div>
-          ))}
-        </div>
-      )}
       {cabinRequests.length > 0 && (
         <div>
           <h1 style={styles.header}>Cabin Requests</h1>
@@ -84,6 +87,18 @@ const RegistrationSummary = ({ data }: RegistrationSummaryPropsType) => {
               </div>
             ))}
           </div>
+        </div>
+      )}
+      {noPhotos.length > 0 && (
+        <div>
+          <h1 style={styles.header}>No Photos</h1>
+          {noPhotos.map((d, i) => (
+            <div key={i} className="flex-1">
+              <p style={styles.summaryText}>
+                {d.firstName} {d.lastName}
+              </p>
+            </div>
+          ))}
         </div>
       )}
     </div>
