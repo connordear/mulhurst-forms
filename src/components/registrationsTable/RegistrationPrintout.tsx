@@ -17,8 +17,9 @@ const RegistrationPrintout = forwardRef(
   ) => {
     return (
       <div ref={ref} className="w-full">
-        {data.map((d, i) => (
+        {data.map((d) => (
           <div
+            key={d.id}
             className="w-full flex flex-col gap-4 justify-space-between page-block"
             style={{
               border: "1px solid black",
@@ -26,7 +27,7 @@ const RegistrationPrintout = forwardRef(
               marginBottom: "1rem",
             }}
           >
-            <div key={i} className="flex w-full gap-4">
+            <div className="flex w-full gap-4">
               <div className="flex flex-col gap-1 w-1/3">
                 <LabelDisplay
                   label="Name"

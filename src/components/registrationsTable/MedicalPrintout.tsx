@@ -14,8 +14,9 @@ const MedicalPrintout = forwardRef(
   ({ data }: MedicalPrintoutPropsType, ref: ForwardedRef<HTMLDivElement>) => {
     return (
       <div ref={ref} className="w-full">
-        {data.map((d, i) => (
+        {data.map((d) => (
           <div
+            key={d.id}
             className="w-full flex flex-col gap-4 justify-space-between page-break"
             style={{
               padding: "1rem",
@@ -24,7 +25,7 @@ const MedicalPrintout = forwardRef(
             <h1 className="px-5 font-bold text-2xl">
               {d.firstName} {d.lastName}
             </h1>
-            <div key={i} className="flex w-full gap-4 px-2">
+            <div className="flex w-full gap-4 px-2">
               <div className="flex flex-col gap-1 w-1/3">
                 <LabelDisplay label="Birthdate" content={d.birthdate} />
                 <LabelDisplay label="Gender" content={d.gender} />
