@@ -26,7 +26,7 @@ const MedicalPrintout = forwardRef(
               {d.firstName} {d.lastName}
             </h1>
             <div className="flex w-full gap-4 px-2">
-              <div className="flex flex-col gap-1 w-1/3">
+              <div className="flex flex-col gap-1 w-1/3 px-1">
                 <LabelDisplay label="Birthdate" content={d.birthdate} />
                 <LabelDisplay label="Gender" content={d.gender} />
               </div>
@@ -63,7 +63,7 @@ const MedicalPrintout = forwardRef(
                 <div className="flex flex-row">
                   <div className="flex flex-col">
                     <LabelDisplay
-                      label="Health Care Number"
+                      label="Health Care #"
                       content={d.healthCareNumber}
                       columnWidth={medColumnWidth}
                     />

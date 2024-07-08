@@ -19,6 +19,7 @@ const LabelDisplay = ({
   return (
     <div className={className}>
       <h2
+        className="font-semibold"
         style={{
           textAlign: stacked ? "left" : "right",
           width: stacked ? "auto" : columnWidth,
@@ -28,7 +29,7 @@ const LabelDisplay = ({
         {label}
         {stacked ? "" : ":"}
       </h2>
-      <p style={{ fontWeight: 600 }}>{content}</p>
+      <p style={{ fontWeight: 400 }}>{content}</p>
     </div>
   );
 };
