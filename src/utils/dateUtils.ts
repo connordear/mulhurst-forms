@@ -1,3 +1,5 @@
+import { Program, RegistrationInfo } from "@/lib/types";
+
 export function convertDateStrToDate(dateStr: string) {
   const [year, month, day] = dateStr.split("-").map(Number);
   return new Date(year, month - 1, day);
@@ -20,6 +22,36 @@ export function getDaysOfWeek(start: string, end: string) {
     daysOfWeek.push(dayOfWeekLookup[date.getDay()]);
   }
   return Array.from(new Set(daysOfWeek));
+}
+
+export function getBirthdays(
+  program: Program | undefined,
+  registrations: RegistrationInfo[]
+) {
+  if (!program) return [];
+  const { startDate, endDate } = program;
+  const start = convertDateStrToDate(startDate);
+  const end = convertDateStrToDate(endDate);
+  const birthdays: RegistrationInfo[] = [];
+  registrations.forEach((registration) => {
+    if (!registration.birthdate) return;
+    const birthdate = convertDateStrToDate(registration.birthdate);
+    console.log(`USER BIRTHDAY ${birthdate}`);
+    for (
+      let date = new Date(start);
+      date <= end;
+      date.setDate(date.getDate() + 1)
+    ) {
+      console.log(`Checking ${date} against ${birthdate}`);
+      if (
+        date.getDate() === birthdate.getDate() &&
+        date.getMonth() === birthdate.getMonth()
+      ) {
+        birthdays.push(registration);
+      }
+    }
+  });
+  return birthdays;
 }
 
 export const dayOfWeekLookup = [

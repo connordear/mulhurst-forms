@@ -1,11 +1,16 @@
 import { NO_ALLERGIES } from "@/lib/medical";
-import { RegistrationInfo } from "@/lib/types";
+import { Program, RegistrationInfo } from "@/lib/types";
+import { getBirthdays } from "@/utils/dateUtils";
 
 type RegistrationSummaryPropsType = {
+  program: Program | undefined;
   data: RegistrationInfo[];
 };
 
-const RegistrationSummary = ({ data }: RegistrationSummaryPropsType) => {
+const RegistrationSummary = ({
+  data,
+  program,
+}: RegistrationSummaryPropsType) => {
   const allergies = data
     .filter((d) => d.allergies && d.allergies !== NO_ALLERGIES)
     .map((d) => `${d.firstName} ${d.lastName} - ${d.allergies}`);
@@ -29,6 +34,8 @@ const RegistrationSummary = ({ data }: RegistrationSummaryPropsType) => {
   const noPhotos = data.filter((d) => !d.arePhotosAllowed);
 
   const firstTimers = data.filter((d) => !d.hasBeenToCampBefore);
+
+  const birthdays = getBirthdays(program, data);
 
   return (
     <div className="grid grid-flow-row-dense gap-10 grid-cols-3 w-full">
@@ -97,6 +104,18 @@ const RegistrationSummary = ({ data }: RegistrationSummaryPropsType) => {
               <p style={styles.summaryText}>
                 {d.firstName} {d.lastName}
               </p>
+            </div>
+          ))}
+        </div>
+      )}
+      {birthdays.length > 0 && (
+        <div>
+          <h1 style={styles.header}>Birthdays</h1>
+          {birthdays.map((b, i) => (
+            <div key={i} className="flex-1">
+              <p
+                style={styles.summaryText}
+              >{`${b.firstName} ${b.lastName} - ${b.birthdate}`}</p>
             </div>
           ))}
         </div>

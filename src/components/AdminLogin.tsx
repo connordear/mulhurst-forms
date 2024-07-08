@@ -2,7 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import RegistrationsTable from "./RegistrationsTable";
+import RegistrationsTable from "./registrationsTable/RegistrationsTable";
 import { Button } from "./ui/button";
 
 function postLogin(password: string) {

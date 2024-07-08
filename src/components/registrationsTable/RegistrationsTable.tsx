@@ -6,19 +6,31 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { useGetPrograms } from "@/lib/api";
 import { convertToTitleCase } from "@/lib/stringUtils";
 import { RegistrationInfo } from "@/lib/types";
-import { ReactNode, useEffect, useMemo, useState } from "react";
-import RegistrationSummary from "./RegistrationSummary";
-import RegistrationTableRow from "./RegistrationTableRow";
-import CopyButton from "./ui/copy-button";
+import {
+  ReactNode,
+  createRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import ReactToPrint from "react-to-print";
+import { Button } from "../ui/button";
+import CopyButton from "../ui/copy-button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../ui/select";
+import MedicalPrintout from "./MedicalPrintout";
+import RegistrationPrintout from "./RegistrationPrintout";
+import RegistrationSummary from "./RegistrationSummary";
+import RegistrationTableRow from "./RegistrationTableRow";
 
 const OMIT_COLUMNS = [
   "id",
@@ -50,7 +62,14 @@ export type TableColumn<T> = {
 const RegistrationsTable = ({
   registrations: data,
 }: RegistrationsTablePropsType) => {
+  const registrationPrintRef = createRef<HTMLDivElement>();
+  const medicalPrintRef = createRef<HTMLDivElement>();
   const [selectedTab, setSelectedTab] = useState<string>();
+  const { data: programs } = useGetPrograms();
+  const selectedProgram = useMemo(
+    () => programs?.find((p) => selectedTab === p.name),
+    [programs]
+  );
 
   const programRegistrationLookup = useMemo(() => {
     return (
@@ -62,7 +81,7 @@ const RegistrationsTable = ({
     );
   }, [data]);
 
-  const programs = useMemo(() => {
+  const programsTabs = useMemo(() => {
     return Object.keys(programRegistrationLookup).map((key) => ({
       key,
       title: `${programRegistrationLookup[key].length} - ${key}`,
@@ -75,10 +94,10 @@ const RegistrationsTable = ({
   }, [programRegistrationLookup, selectedTab]);
 
   useEffect(() => {
-    if (!selectedTab && programs.length > 0) {
-      setSelectedTab(programs[0].key);
+    if (!selectedTab && programsTabs.length > 0) {
+      setSelectedTab(programsTabs[0].key);
     }
-  }, [programs, selectedTab]);
+  }, [programsTabs, selectedTab]);
 
   const programRegistrationsEmails = useMemo(() => {
     const emails: string[] = [];
@@ -196,6 +215,12 @@ const RegistrationsTable = ({
 
   const allColumns = [...registrationColumns, ...defaultColumns];
 
+  const printTrigger = useCallback(() => <Button>Print</Button>, []);
+  const printContent = useCallback(
+    () => registrationPrintRef.current,
+    [registrationPrintRef.current, registrations, selectedProgram]
+  );
+
   return (
     <div
       style={{
@@ -220,19 +245,49 @@ const RegistrationsTable = ({
       >
         Mulhurst Registrations
       </h1>
-      <Select onValueChange={(v) => setSelectedTab(v)} value={selectedTab}>
-        <SelectTrigger>
-          <SelectValue>{selectedTab ?? "Select a program"}</SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          {programs.map((row) => (
-            <SelectItem key={row.key} value={row.key}>
-              {row.title}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <RegistrationSummary data={registrations} />
+      <div className="flex flex-row gap-4 justify-space-between w-full">
+        <Select onValueChange={(v) => setSelectedTab(v)} value={selectedTab}>
+          <SelectTrigger>
+            <SelectValue>{selectedTab ?? "Select a program"}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {programsTabs.map((row) => (
+              <SelectItem key={row.key} value={row.key}>
+                {row.title}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <ReactToPrint
+          documentTitle={selectedProgram?.name}
+          trigger={() => <Button>Print Camper Info</Button>}
+          content={() => registrationPrintRef.current}
+          pageStyle={"@page { size: auto; margin; }"}
+        />
+        <ReactToPrint
+          documentTitle={selectedProgram?.name}
+          trigger={() => <Button>Print Medical Info</Button>}
+          content={() => medicalPrintRef.current}
+          pageStyle={"@page { size: auto; margin; }"}
+        />
+      </div>
+      <div
+        style={{
+          display: "none",
+        }}
+      >
+        <RegistrationPrintout
+          ref={registrationPrintRef}
+          data={registrations}
+          program={selectedProgram}
+        />
+        <MedicalPrintout
+          ref={medicalPrintRef}
+          data={registrations}
+          program={selectedProgram}
+        />
+      </div>
+      <RegistrationSummary data={registrations} program={selectedProgram} />
       <Table
         style={{
           maxWidth: "1000px",

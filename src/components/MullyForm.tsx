@@ -1,6 +1,6 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getPrograms } from "@/lib/api";
+import { useGetPrograms } from "@/lib/api";
 import {
   CamperInfo,
   NO_SIBLING,
@@ -23,7 +23,6 @@ import {
 import { useSelectedProgram } from "@/lib/programState";
 import { getDaysOfWeek } from "@/utils/dateUtils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 
 import { useEffect, useMemo, useState } from "react";
@@ -54,11 +53,7 @@ function getTabStyle(formState: FormState<any>) {
 }
 
 const MullyForm = () => {
-  const { data: programs, isLoading } = useQuery({
-    queryKey: ["programs"],
-    queryFn: getPrograms,
-    select: (data) => data.filter((program) => program.isActive),
-  });
+  const { data: programs } = useGetPrograms();
 
   const [camperData, setCamperData] = useAtom(camperInfoAtom);
   const camperForm = useForm<CamperInfo>({
