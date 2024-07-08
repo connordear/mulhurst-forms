@@ -1,6 +1,6 @@
 import { RegistrationInfo } from "@/lib/types";
+import { TableCell, TableRow } from "../ui/table";
 import { TableColumn } from "./RegistrationsTable";
-import { TableCell, TableRow } from "./ui/table";
 
 type RegistrationTableRowPropsType = {
   data: RegistrationInfo;
