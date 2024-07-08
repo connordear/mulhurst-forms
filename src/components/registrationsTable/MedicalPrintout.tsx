@@ -123,5 +123,6 @@ const MedicalPrintout = forwardRef(
     );
   }
 );
+MedicalPrintout.displayName = "MedicalPrintout";
 
 export default MedicalPrintout;

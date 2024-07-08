@@ -132,5 +132,6 @@ const RegistrationPrintout = forwardRef(
     );
   }
 );
+RegistrationPrintout.displayName = "RegistrationPrintout";
 
 export default RegistrationPrintout;
