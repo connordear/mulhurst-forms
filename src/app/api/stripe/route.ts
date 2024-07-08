@@ -39,7 +39,6 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  console.log("in GET", req.nextUrl.searchParams.get("session_id"));
   try {
     const session = await stripe.checkout.sessions.retrieve(
       req.nextUrl.searchParams.get("session_id")

@@ -36,13 +36,11 @@ export function getBirthdays(
   registrations.forEach((registration) => {
     if (!registration.birthdate) return;
     const birthdate = convertDateStrToDate(registration.birthdate);
-    console.log(`USER BIRTHDAY ${birthdate}`);
     for (
       let date = new Date(start);
       date <= end;
       date.setDate(date.getDate() + 1)
     ) {
-      console.log(`Checking ${date} against ${birthdate}`);
       if (
         date.getDate() === birthdate.getDate() &&
         date.getMonth() === birthdate.getMonth()

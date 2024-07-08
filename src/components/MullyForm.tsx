@@ -74,7 +74,6 @@ const MullyForm = () => {
         selectedProgram?.startDate,
         selectedProgram?.endDate
       );
-      console.log("possibleDaysOfWeek", possibleDaysOfWeek, selectedDaysOfWeek);
       if (possibleDaysOfWeek.length !== selectedDaysOfWeek.length) {
         priceId = selectedProgram?.dayPriceId;
         quantity = selectedDaysOfWeek.length;

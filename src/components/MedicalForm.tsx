@@ -32,7 +32,6 @@ type MedicalFormPropsType = {
 };
 const MedicalForm = ({ form: medicalForm, onSubmit }: MedicalFormPropsType) => {
   function onSubmitMedicalInfo(values: MedicalInfo) {
-    console.log(values);
     onSubmit(values);
   }
 
