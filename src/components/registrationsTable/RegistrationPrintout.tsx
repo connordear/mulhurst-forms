@@ -61,7 +61,7 @@ const RegistrationPrintout = forwardRef(
                   columnWidth={secondColumnWidth}
                 />
                 <LabelDisplay
-                  label="Cabin Friend Request"
+                  label="Cabin Request"
                   content={d.friendCabinRequest}
                   columnWidth={secondColumnWidth}
                 />
